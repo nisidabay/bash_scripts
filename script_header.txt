@@ -1,0 +1,16 @@
+#!/usr/bin/bash
+#
+# This function calculates the size of a folder
+# Assumes that the folder exists. No more checkouts.
+#
+# Arguments:
+#   $1 - The folder to get the size from
+#   $2 - The size to check against as a top limit
+#   $3 - The unit M (Megabyte) - K (Kilobytes) as a references for calculation
+#
+# Returns:
+#   0 - If the size of the the folder is greater that the limit
+#   1 - If it's not
+#   127 - If the units to compare are different 
+# 
+# Author: nisidabay

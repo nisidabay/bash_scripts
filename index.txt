@@ -1,0 +1,98 @@
+Script              	Purpose
+
+audio2txt.py        	# Convert mp3/wav files to text files
+Bell.mp3            	
+bm-dirs             	
+change_bg_lnx.sh    	# Change background image 
+change_keyboard.sh  	# Change the keyboard layout 
+change_terminal_lnx.sh	# Change the terminal in i3 config file
+change_wm_raspi.sh  	# Change window manager on raspberry
+cheat.py            	# cht.sh GUI
+checksum_univ.py    	# Return the md5/sha256 of a file or input string
+check_utf_error.py  	# Check for encoding errors in files encoded in "latin-1"
+choose-emoji        	# Copy emoji list from dmenu
+cht.sh              	# Cheat sheet script usage
+color_test_univ.sh  	# Show colors in scape squences
+command_notes       	# Define shell command forms concepts 
+connect_wifi.sh     	# Function to exit
+count_commands_univ.sh	# Count the number of commands in PATH
+crypto_image_lnx.sh 	# Create a valult like LUKS encrypted image
+diff_univ.py        	# A diff implementation in Python
+dm-note             	# Store multiple one-line texts or codes and copy one of them when needed.
+duplicate_files.sh  	# Show duplicate files
+encrypt_cd.sh       	# Prompt user for confirmation
+flac2mp3_lnx.sh     	# Convert flac files to mp3
+genpasswd_lnx.sh    	# Generate random passwords
+google.py           	# Script to search with Google
+google_search.py    	# Find topics in google
+grab_screen.sh      	# Take a snapshot of the screen
+http_server.py      	# Simple HTTP Server With Upload.
+install_arch_raspi.sh	# Download and install archlinux in raspi
+install_fonts.sh    	# Install adobe and nerd fonts
+install_xfce_theme.sh	# Install xfce4-terminal themes
+italian_parser_univ.py	# Find words with two consecutive repeated characters
+kill_dwm.sh         	# Kill dwm
+lfub                	# Wrapper for lb
+lock-screen         	# Lock screen with random images
+mail.sh             	# Send message with neomutt
+mail_wrapper.sh     	# Wrapper for mail.sh
+man_pages           	# Open man page in  dmenu
+man_pages.sh        	
+md2wiki.sh          	# Change md files to wiki
+monitor.sh          	
+mp3_to_wav.sh       	# Convert mp3 files to wav
+mp4_to_mp3.sh       	# Convert mp4 to mp3
+murphy_univ.py      	# Generate random Murphy's law jokes
+mysudo              	# Run command as sudo without password
+notify-log.sh       	# Idea from: Derek Taylog
+observer_folder.py  	# Idea from: watchdog module
+pdf_extracter.py    	# Create an argument parser
+pdf_extracter_univ.py	# Name: pdf_extract
+pomodoro.py         	# Global variables for each timer
+port_scanner.py     	# Idea from: Internet
+preimg.sh           	## A script to prepare images (screenshots) 
+py_binary_univ.py   	# Idea from:
+pyrexp.py           	# Learning Regex with Python - GUI Interactive Tool
+python_dev_univ     	# New terminal 
+python_fortune_univ.py	# Name: python_fortune.py
+python_nugggets_univ	#** Entry file selection **
+record_audio.sh     	# Description: Utility to record text from Mic using arecord
+regex               	# Show and insert regular expressions in the terminal
+remote_transfer_lnx.sh	# Description: Send files/folders over SCP
+remove_caches_univ.sh	
+remove_dups.py      	# For all files with the same file size, get their hash on the 1st 1024 bytes
+remove_logs_univ.sh 	
+scan_favorites.sh   	# Author: Carlos Lacaci Moya
+scan_local_network.sh	
+scan_local_network_univ.sh	
+script_index.sh     	# Generate an index of current scripts in this dir
+set_transparency.sh 	# This script sets transparency for the desktop using xcompmgr.
+setup.py            	
+shortcuts           	# Run prefer applications in dmenu
+show_folders.py     	# Name:        show_folders.py
+st-copyout          	# allowing the user to copy the output of one.
+st-editscreen       	
+st-urlhandler       	# First remove linebreaks and mutt sidebars:
+substitution_notes  	# Show and insert variable substitution templates in terminal
+sync_calc_lnx.sh    	# Syncronize calcurse calendars
+sync_copyq.sh       	# Syncronize copyq clipboard contents
+sync_hosts.py       	# Author: Carlos Lacaci Moya
+sync_xpad_lnx.sh    	# Syncronize Xpad Notes
+tags                	#eee"$/;"	v
+test_notes          	# Define test expressions concepts 
+tk-folders.py       	# Initialize the GUI
+tldr_pages.sh       	# Script to search for commands and apps using TLDR
+tmux_notes          	# Show tmux commands
+transfer2fav_lnx.sh 	# Description: Send files/folders over SCP to a series of hosts
+tree_pathlib.py     	# Idea from: RealPython.com
+tutorialvids        	# list of videos they can select and watch without a browser. 
+txt2mp3_lnx.sh      	# Script para pasar de texto a mp3
+update_xresources.sh	# Update the WM colors based on pywal colors
+usb_encrypt.sh      	# Encrypt a usb drive
+utilities.bak       	# Author: Carlos Lacaci Moya
+vob2mp3.sh          	# Convert DvD .VOB files to mp3 files for listening 
+wal_change.sh       	# Change the appearance of the WM based on the wollpaper
+webp2png_univ.py    	# Convert certain images to png
+wiki_2_md.sh        	# Author: Carlos Lacaci Moya
+word_permutations.py	# Idea from:
+xfce_background.sh  	

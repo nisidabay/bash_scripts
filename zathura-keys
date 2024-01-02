@@ -1,0 +1,21 @@
+#!/usr/bin/bash
+#
+# Show zathura main keys
+declare -a keys
+keys=(
+    "Dark mode: Ctrl+r"
+	"Bottom of document: G"
+	"Down/up a half page: d/u"
+	"Highlight URLS to follow: f"
+	"Move left/down/up/right in document: h/j/k/l"
+	"Print document: p"
+	"Reload document if changed: r"
+	"Rotate document: R"
+	"Toggle dual-page mode. D"
+	"Top of document: gg"
+	"Zoom out/in: zi/zo/z0"
+)
+
+# Use dmenu to display the list of concepts and get user input
+printf '%s\n' "${keys[@]}" | dmenu -i -p "Zathura keys" -l 20 -fn Monospace-14 > /dev/null
+

@@ -1,0 +1,7 @@
+27-Jul-23 07:32:03  - InstallModules - INFO - On line: 61 - ⏳ Installing ... typer==0.6.1
+27-Jul-23 07:32:04  - InstallModules - INFO - On line: 66 - 👉 Finish installing ... typer==0.6.1
+27-Jul-23 07:32:04  - InstallModules - INFO - On line: 61 - ⏳ Installing ... mypy
+27-Jul-23 07:32:05  - InstallModules - INFO - On line: 66 - 👉 Finish installing ... mypy
+27-Jul-23 07:32:05  - InstallModules - INFO - On line: 61 - ⏳ Installing ... streamlit
+27-Jul-23 07:32:05  - InstallModules - INFO - On line: 66 - 👉 Finish installing ... streamlit
+27-Jul-23 07:32:05  - InstallModules - INFO - On line: 55 - 🍻 All modules installed!

@@ -1,0 +1,19 @@
+#!/usr/bin/bash
+#
+# Copy emoji list from dmenu
+#
+# Shows the selected character in dunst if running.
+# Must have xclip installed 
+
+# Check if xclip is installed
+xclip -h >/dev/null 2>&1 || exit
+
+chosen=$(cat $HOME/bin/dmenu/emoji_list | dmenu -i -p "Choose an emoji to insert" -l 20 -fn Monospace-14)
+
+[ "$chosen" != "" ] || exit
+
+# Get only the icon
+c=$(echo "$chosen" | sed "s/ .*//")
+echo "$c" | tr -d '\n' | xclip -selection clipboard
+notify-send "'$c' copied to clipboard." &
+

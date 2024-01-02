@@ -1,0 +1,6 @@
+#!/bin/bash
+#conexion a tiscali
+/usr/sbin/pppd connect \
+'/usr/sbin/chat -v -t60 "" atz OK atx3w2l1 OK atdt10220810880000 CONNECT ""' \
+user nisidabay
+#telefono Giugliano 0810730000
