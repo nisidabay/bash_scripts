@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-# Filter out with grep
+# Filter output with grep
 
 while read -r ip name
 do
