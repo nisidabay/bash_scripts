@@ -43,3 +43,5 @@ fi
 
 tput cnorm
 }
+# Usage
+chk_dependencies "sxiv" "convert"
