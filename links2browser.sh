@@ -1,1 +1,0 @@
-utd_lnx/links2browser.sh
