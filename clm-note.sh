@@ -1,1 +1,0 @@
-dmenu/clm-note.sh
