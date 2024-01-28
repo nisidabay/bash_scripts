@@ -13,7 +13,7 @@
 trap ctrl_c INT
 function ctrl_c(){
     tput setaf 1 # red color
-    echo  [!] Exiting from ["$BASH_SOURCE"] ... 
+    echo  [!] Exiting from ["${BASH_SOURCE[0]}"] ... 
     tput sgr0
     exit 1
 }
