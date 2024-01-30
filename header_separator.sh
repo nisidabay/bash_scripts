@@ -1,6 +1,6 @@
 #!/usr/bin/bash
 #
-# Creates a header separator
+# Log header separator. Change it to your needs
 LOG_FILE=$HOME/log.txt
 header_separator(){
 # Get the current date
@@ -24,5 +24,7 @@ printf "%s\n%s\n" "$header" "$separator" >> "$LOG_FILE"
 }
 
 # Usage
-# header_separator
-# header_separator "end"
+: '
+    header_separator
+    header_separator "end"
+'
