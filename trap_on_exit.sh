@@ -41,3 +41,4 @@ touch $$-2.tmp
 add_on_exit rm -f $$-2.tmp
 
 ls -la '*.tmp'
+
