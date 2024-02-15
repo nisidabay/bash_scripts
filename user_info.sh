@@ -1,17 +1,27 @@
-#!/bin/bash 
-# Author: Carlos Lacaci Moya
-# Date: 11/05/20
-# Description: Find users with account on the system
+#!/bin/sh 
+# 
+# Find users with account on the system
 
-read -p "Enter the user login: " LOGIN
+findUser() {
+    read -p "Enter the user login: " LOGIN
 
-cat /etc/passwd | grep $LOGIN > /dev/null
+    # Attempt to find the user in /etc/passwd
+    if cat /etc/passwd | grep "$LOGIN" > /dev/null; then
+        echo "[+] Found user: $LOGIN"
+        # Print detailed user information
+        cat /etc/passwd | awk -v login="$LOGIN" 'BEGIN{FS=":"} $1 == login {print $1, $5, $6, $7}'
+    else
+        # For macOS, attempt to find the user using dscl
+        if [ "$(uname)" = "Darwin" ] && dscl . -list /Users | grep -q "^$LOGIN\$"; then
+            echo "[+] Found user: $LOGIN"
+            # On macOS, use dscl to get user information
+            echo "User details for $LOGIN:"
+            dscl . -read /Users/"$LOGIN" RealName NFSHomeDirectory UserShell
+        else
+            echo "[-] User not found!"
+        fi
+    fi
+}
 
-if [ $? -eq 0 ]
-then
-	echo "[+] Found user: $LOGIN"
-	
-	cat /etc/passwd | awk 'BEGIN{FS=":"} /'"$LOGIN"'/ {print $1, $5, $6, $7}'
-else
-	echo "[-] User not found!"
-fi
+# Call the function
+findUser
