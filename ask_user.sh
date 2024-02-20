@@ -2,12 +2,17 @@
 # 
 # Ask the user for an action
 ask_user_action(){
-    local msg="$1"  # Correctly declare local variable for the message
-    local answer  # Declare answer as a local variable
+    local msg="$1"  
+    local answer  
 
-    # Correct usage of read with prompt
-    read -p "$msg (y/n): " -sn1 answer
-    echo  # Add a newline for output formatting
+   # Prompt the user. Default choice is No (N)
+    read -p "$msg (y/N): " -sn1 answer
+    echo  # Add a newline for better output formatting
+
+    # If no input is provided, treat as 'N'
+    if [ -z "$answer" ]; then
+        answer="N"
+    fi
 
     # Analyze the user's answer
     case "$answer" in
@@ -26,7 +31,6 @@ ask_user_action(){
     esac
 }
 
-# Correct comment for function usage
 # Example usage of ask_user_action function
 if ask_user_action "Do you want to see the log file?"; then
     echo "Showing the log file..."
