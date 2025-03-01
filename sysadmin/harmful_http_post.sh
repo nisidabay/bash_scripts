@@ -1,12 +1,11 @@
-#!/bin/bash
+#!/usr/sbin/bash
 
-INTERFACE="enp2s0"  # "eth0" or "wlan0" or "enp2s0" or other interface names as per your system
-
+INTERFACE="enp2s0" # "eth0" or "wlan0" or "enp2s0" or other interface names as per your system
 
 # Run tcpdump to listen for POST requests with suspicious commands
-sudo tcpdump -i $INTERFACE port 80 -A | grep -i "POST" | \
-grep -Ei "(eval|system|exec|bash|sh|wget|curl)" | \
-awk '{print $8}'
+sudo tcpdump -i $INTERFACE port 80 -A | grep -i "POST" |
+    grep -Ei "(eval|system|exec|bash|sh|wget|curl)" |
+    awk '{print $8}'
 
 # Why It Is Useful:
 
@@ -28,4 +27,3 @@ awk '{print $8}'
 # and services, especially those that are publicly accessible and therefore more
 # prone to attack. By identifying such patterns in network traffic, security teams
 # can take appropriate actions to investigate and respond to potential threats.
-
