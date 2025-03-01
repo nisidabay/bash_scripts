@@ -1,6 +1,6 @@
-#!/bin/bash
-# Author: Carlos Lacaci
-# Purpose: Open favorite links from a text file
+#!/usr/bin/env bash
+#
+# Open favorite links from a text file
 # Modify by ChatGPT
 # Created in 2019
 # Modified date: mié 27 dic 2023 10:58:03 CET
@@ -47,23 +47,23 @@ if [ ! -f "$url_file" ]; then
 fi
 
 echo -e "${blue}[+] Opening web pages from $url_file ...${reset}"
-max_parallel=5  # Limit the number of parallel browser instances
+max_parallel=5 # Limit the number of parallel browser instances
 count=0
 
 # Read and open URLs
 while IFS= read -r line || [[ -n "$line" ]]; do
     # Skip empty lines and comments
     [[ "$line" =~ ^\#.*$ ]] || [[ -z "$line" ]] && continue
-    
-    $BROWSER "$line" &  # Open URL in the background
+
+    $BROWSER "$line" & # Open URL in the background
     ((count++))
 
     # Wait if the maximum number of parallel instances is reached
-    if (( count >= max_parallel )); then
+    if ((count >= max_parallel)); then
         wait -n
         ((count--))
     fi
-done < "$url_file"
+done <"$url_file"
 
-wait  # Wait for all background processes to finish
+wait # Wait for all background processes to finish
 echo -e "${green}[+] Completed opening all web pages.${reset}"
