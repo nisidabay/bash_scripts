@@ -17,3 +17,4 @@
 /home/nisidabay/proyectos_git/todo_univ
 /home/nisidabay/proyectos_git/transcriber
 /home/nisidabay/proyectos_git/utd_lnx
+/home/nisidabay/proyectos_git/go_practice

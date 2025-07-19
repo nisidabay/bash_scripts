@@ -1,31 +1,43 @@
-#!/bin/bash
+#!/usr/bin/bash
+# Idea: Carlos Lacaci Moya
+# Author: AI
+# Description: Track the status of local repositories
+# Date:Sat Jul 19 11:51:44 PM CEST 2025
+# Dependencies: 
+
+# Debugging setup for bash
+set -euo pipefail
+############################################################################### 
 #
 # Verify the status of local repositories
 
 # Path to the file containing the list of repositories
-SCRIPT_PATH="$HOME/bin/git_observer"
 REPOS_FILE="$SCRIPT_PATH/repos.txt"
+# Path to the project folder
+SCRIPT_PATH="$HOME/bin/git_observer"
+# Log file
 LOG_FILE="$HOME/git_status_log.txt"
+
 echo  -n "" > "$LOG_FILE"
 untracked_changes=0
-#
+
 # Creates a header for the log
 header_separator(){
 # Get the current date
-_date=$(date)
-header="Logging started at $_date"
+local _date=$(date)
+local header="Logging started at $_date"
 
 # Check if an argument is provided
 if [[ $# -gt 0 && $1  == "end" ]]; then
-    # If provided argument: use "Logging ended"
+    # If provided argument is "end": append "Logging ended"
     header="Logging ended at $_date" 
 fi
 
 # Get the length of the header
-separator_length=${#header}
+local separator_length=${#header}
 
 # Create a separator of the same length as the header
-separator=$(printf '%*s' "$separator_length" | tr ' ' '-')
+local separator=$(printf '%*s' "$separator_length" | tr ' ' '-')
 
 # Print the header and separator to the log file
 printf "%s\n%s\n" "$header" "$separator" >> "$LOG_FILE" 
