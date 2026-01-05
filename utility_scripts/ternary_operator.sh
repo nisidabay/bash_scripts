@@ -1,16 +1,12 @@
-#!/usr/bin/bash
-################################################################################
-# Author: Carlos Lacaci Moya
-# Description: Usage of ternary operator
-# Date: 
-# Dependencies:
-################################################################################
-can_vote=0
-age=18
+#!/usr/bin/env bash
+#
+# Usage of ternary operator
 
-((age >= 18?(can_vote=1):(can_vote=0)))
-echo "Can Vote: $can_vote"
+age=25
 
-result=$(( 1 == 2 ? "true" : "false" ))
-echo $result  
-
+result=$((age >= 18 ? 1 : 0))
+if [ $result -eq 1 ]; then
+	echo "You can vote"
+else
+	echo "You cannot vote"
+fi
