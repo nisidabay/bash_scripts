@@ -1,10 +1,14 @@
-#!//bin/bash
+#!/usr/bin/env bash
+#
+# List established external connections.
+#
+# Dependencies: netstat, awk, grep, sort, uniq, cut
 
-netstat -anp | grep -i "established" | \
-grep -v "127.0.0.1" | \
-awk '{print $5}' | \
-cut -d: -f1 | sort | uniq -c | \
-sort -nr
+netstat -anp | grep -i "established" |
+    grep -v "127.0.0.1" |
+    awk '{print $5}' |
+    cut -d: -f1 | sort | uniq -c |
+    sort -nr
 
 # Why It Is Useful:
 

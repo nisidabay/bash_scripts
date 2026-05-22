@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-
-# Change file extensions in the current directory
+#
+# Change file extensions in the current directory.
+#
+# Dependencies: bash
 
 show_help() {
     cat <<EOF

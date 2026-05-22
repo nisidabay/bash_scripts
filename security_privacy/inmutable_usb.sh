@@ -1,4 +1,8 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+#
+# Apply immutable attribute to USB files.
+#
+# Dependencies: chattr, find, sudo
 
 k Prompt the user for the path to the USB drive
 read -p "Enter the path to your USB drive: " -r usb_path

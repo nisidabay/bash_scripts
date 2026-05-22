@@ -1,11 +1,11 @@
-#!/usr/sbin/bash
-
-INTERFACE="enp2s0" # "eth0" or "wlan0" or "enp2s0" or other interface names as per your system
-
-# Run tcpdump to listen for POST requests with suspicious commands
+#!/usr/bin/env bash
+#
+# Monitor HTTP POST requests for suspicious commands with tcpdump.
+#
+# Dependencies: tcpdump, sudo
 sudo tcpdump -i $INTERFACE port 80 -A | grep -i "POST" |
-    grep -Ei "(eval|system|exec|bash|sh|wget|curl)" |
-    awk '{print $8}'
+	grep -Ei "(eval|system|exec|bash|sh|wget|curl)" |
+	awk '{print $8}'
 
 # Why It Is Useful:
 

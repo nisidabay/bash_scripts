@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Demonstrate ANSI color codes.
+#
 
 # Ansi color code variables
 red="\e[0;91m"

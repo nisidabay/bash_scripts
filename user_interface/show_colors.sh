@@ -1,20 +1,14 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# Shows the 50 colors availables in your system
+# Show available terminal colors.
 #
-# Arguments:
-# None
-#
-# Returns:
-# None
-# 
-# Author: nisidabay
-function show_colors(){
+# Dependencies: tput
+
+function show_colors() {
     declare -i color=0
-    for i in $(seq 1  50)
-    do
+    for i in $(seq 1 50); do
         echo "Color:$color $(tput setaf "$i")"
-        ((color+=1))
+        ((color += 1))
         sleep 0.5
     done
     tput sgr0

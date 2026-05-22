@@ -1,6 +1,8 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
-# Creates a new user on the local system.
+# Create a new local user account.
+#
+# Dependencies: useradd, chpasswd, passwd
 
 createUserAccount() {
     # Check if the script is run as root. Exit if not within the function.

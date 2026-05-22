@@ -1,17 +1,8 @@
-#!/usr/bin/bash
-##################################################
-# Name: genpasswd.sh
+#!/usr/bin/env bash
 #
-# Purpose: Generate random passwords
+# Generate random passwords.
 #
-# Date: vie 11 jun 2021 16:34:08 CEST
-#
-# Author: From introduction to Advanced Bash Usage
-# James Pannacciulli
-#
-# Modified by: clm
-# Date: mié 25 ago 2021 17:29:59 CEST
-##################################################
+# Dependencies: tr, tee
 
 # Ansi color code global variables
 red="\e[0;91m"
@@ -24,34 +15,34 @@ reset="\e[0m"
 # Globals
 PASSWD_LBL=9
 
-function separator(){
+function separator() {
     # Add fancy separator
-    for ((i=0; i<= $((${#PASSWD}+$PASSWD_LBL)); i++));do
+    for ((i = 0; i <= $((${#PASSWD} + $PASSWD_LBL)); i++)); do
         echo -n -e "${red}-${reset}"
     done
-    echo 
-} 
-
-function show_help(){
-  # Usage
-  printf "${green}Generate a random password.\n${reset}"
-  printf "length [-l ] must be 8 or more characters\n"
-  printf "${green}\tusage: $0 -l [length] [-s] [save_to_file] [-p] [persistent]\n${reset}"
-  printf "${green}\t -l [length]: length of the password\n${reset}"
-  printf "${green}\t -s [save_to_file]: name of the password to store\n${reset}"
-  printf "${green}\t -p [persistent]: make the file undeleteable\n${reset}"
-  echo
-  printf "${green}Example: $0 -l 8 -s dropbox\n${reset}"
-  printf "${green}Example: $0 -l 12 -s amazon_password -p yes\n${reset}"
-  exit 1
+    echo
 }
 
-function genpass(){
+function show_help() {
+    # Usage
+    printf "${green}Generate a random password.\n${reset}"
+    printf "length [-l ] must be 8 or more characters\n"
+    printf "${green}\tusage: $0 -l [length] [-s] [save_to_file] [-p] [persistent]\n${reset}"
+    printf "${green}\t -l [length]: length of the password\n${reset}"
+    printf "${green}\t -s [save_to_file]: name of the password to store\n${reset}"
+    printf "${green}\t -p [persistent]: make the file undeleteable\n${reset}"
+    echo
+    printf "${green}Example: $0 -l 8 -s dropbox\n${reset}"
+    printf "${green}Example: $0 -l 12 -s amazon_password -p yes\n${reset}"
+    exit 1
+}
+
+function genpass() {
     # Main function
     # Check for valid parameter
-    if [ ${#length} -ge 1 ] && [ $length -gt 7 ];then
+    if [ ${#length} -ge 1 ] && [ $length -gt 7 ]; then
 
-        PASSWD=$(tr -dc 'a-zA-Z0-9_#@.-' < /dev/urandom | head -c ${1:-$length} | tee ${out_file})
+        PASSWD=$(tr -dc 'a-zA-Z0-9_#@.-' </dev/urandom | head -c ${1:-$length} | tee ${out_file})
 
         separator
         echo -e "${green}${bold}Password: $PASSWD ${reset}"
@@ -63,19 +54,19 @@ function genpass(){
     fi
 }
 
-function outfile_separator(){
+function outfile_separator() {
     # Add separator to password name
-    if [[ $out_file != "" ]];then
+    if [[ $out_file != "" ]]; then
         echo -e "${blue}${bold}Name: $out_file${reset}"
         separator
     fi
 }
 
-function make_persistent(){
+function make_persistent() {
     # Make the password file inmutable
-    if [ "$persistent" == "yes" ];then
+    if [ "$persistent" == "yes" ]; then
         new_file="$(pwd)/$out_file"
-        if [ -f "$new_file" ];then
+        if [ -f "$new_file" ]; then
             # Check for inmutability set already
             inmu_set=$(lsattr $new_file | sed -n '/-i/p' | wc -l)
             if [[ $inmu_set -eq 1 ]]; then
@@ -83,12 +74,13 @@ function make_persistent(){
                 echo -e "${red}${bold}[-]Aborting. The password ${green}${bol}$out_file${rese}${red}${bold} is already set and is inmutable${reset}"
                 separator
                 echo $new_file
-                echo -n "Password: ";cat $new_file
+                echo -n "Password: "
+                cat $new_file
                 echo
                 separator
                 exit 1
             fi
-                
+
             $(sudo chattr +i $new_file)
             echo -e "${yellow}${bold}Inmutable: yes${reset}"
             separator
@@ -96,34 +88,33 @@ function make_persistent(){
     fi
 }
 
-
 # Exit if no args provided
 [[ $# -eq 0 ]] && show_help
-while getopts ":hl:s:p:" option;do
-  case $option in
-    l) 
+while getopts ":hl:s:p:" option; do
+    case $option in
+    l)
         length=$OPTARG
         ;;
-    s) 
+    s)
         save=$OPTARG
         out_file=$save
         ;;
     p)
         persistent=$OPTARG
         ;;
-    h) 
+    h)
         show_help
         ;;
-    \?) 
+    \?)
         echo -e "${red}[-] Invalid option -$OPTARG${reset}"
         show_help
         ;;
 
-    :) 
+    :)
         echo -e "${red}[-] Missing value for the argument [-$OPTARG]${reset}"
         show_help
         ;;
-  esac
+    esac
 done
 shift $(($OPTIND - 1))
 

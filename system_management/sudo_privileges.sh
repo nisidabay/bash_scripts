@@ -1,8 +1,10 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# Example script to update and clean up system packages
+# Update system packages with sudo.
+#
+# Dependencies: apt-get
 
-request_sudo(){
+request_sudo() {
     echo "Please enter your sudo password to perform privileged tasks."
     if ! sudo -v; then
         echo "Failed to obtain sudo privileges. Exiting."
@@ -10,7 +12,10 @@ request_sudo(){
     fi
 
     # Keep sudo timestamp updated while the script is running
-    while true; do sudo -v; sleep 60; done 2>/dev/null &
+    while true; do
+        sudo -v
+        sleep 60
+    done 2>/dev/null &
     # Capture the PID of the background job
     local keep_alive_pid=$!
     echo "Keeping sudo session alive..."

@@ -1,10 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# Make a bootable Linux cdrom
+# Create a bootable ISO image.
+#
+# Dependencies: mkisofs
+
 # Function to display a simple progress bar
 progress_bar() {
     local duration=${1}
-    for (( elapsed=1; elapsed<=duration; elapsed++ )); do
+    for ((elapsed = 1; elapsed <= duration; elapsed++)); do
         printf "▇"
         sleep 1
     done

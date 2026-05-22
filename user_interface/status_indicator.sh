@@ -1,12 +1,14 @@
-#!/usr/bin/bash
-# 
-# Show a status indicator
+#!/usr/bin/env bash
+#
+# Show a loading status indicator.
+#
+# Dependencies: md5sum, awk, grep, sort
 
-show_duplicates(){
-md5sum *.$1 | awk '{counts[$1]++; names[$1]=names[$1] " " $2} END {for (key in counts) print counts[key] " " key ":"  names[key]}' | grep -v '^1 ' \
-    | sort -nr
-    }
-function status_indicator(){
+show_duplicates() {
+    md5sum *.$1 | awk '{counts[$1]++; names[$1]=names[$1] " " $2} END {for (key in counts) print counts[key] " " key ":"  names[key]}' | grep -v '^1 ' |
+        sort -nr
+}
+function status_indicator() {
     read -rp ">>> Enter the file extension without period: " ext
     show_duplicates "$ext"
 
@@ -15,10 +17,8 @@ function status_indicator(){
     frames="/ | \ -"
 
     #"Check that the process is still running
-    while kill -0 $pid > /dev/null;
-    do
-        for frame in $frames;
-        do
+    while kill -0 $pid >/dev/null; do
+        for frame in $frames; do
             printf "\r$frame %s", "Loading..."
             sleep 0.5
         done

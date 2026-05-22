@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Symlink dmenu scripts to ~/bin.
+#
+# Dependencies: file, ln
 
 dmenu_folder="$HOME/bin/dmenu"
 bin_folder="$HOME/bin"

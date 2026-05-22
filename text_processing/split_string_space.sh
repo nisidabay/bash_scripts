@@ -1,16 +1,15 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# Split a string based on space using IFS by default
+# Split a string based on space using IFS.
+#
+# Dependencies: bash
+
 text="Welcome to LinuxHint"
 
-# Append the splitted words into an array
-# read -a strarray <<< "$text"
-read -a strarray <<< "$text"
+read -a strarray <<<"$text"
 
 echo "There are ${#strarray[@]} words in the text"
 
-for word in "${strarray[@]}";do
+for word in "${strarray[@]}"; do
     printf "%s\n" "$word"
 done
-
-

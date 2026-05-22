@@ -1,12 +1,10 @@
-#!/bin/sh
-
-# A dwm_bar function to show the closest appointment in calcurse
-# Joe Standring <git@joestandring.com>
-# GNU GPLv3
-
+#!/usr/bin/env bash
+#
+# Show closest calcurse appointment.
+#
 # Dependencies: calcurse
 
-dwm_ccurse () {
+dwm_ccurse() {
     APTSFILE="$HOME/.calcurse/apts"
     APPOINTMENT=$(head -n 1 "$APTSFILE" | sed -r 's/\[1\] //')
 

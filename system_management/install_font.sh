@@ -1,8 +1,12 @@
-#!/usr/bin/bash
 #!/usr/bin/env bash
+#
+# Download and install Source Code Pro fonts.
+#
+# Dependencies: wget, unzip, fc-cache
+
 cd Downloads
 wget https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip
-if [ ! -d "~/.fonts" ] ; then
+if [ ! -d "~/.fonts" ]; then
     mkdir ~/.fonts
 fi
 unzip 1.050R-it.zip

@@ -1,7 +1,11 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
+#
+# Split AVI file into smaller chunks.
+#
+# Dependencies: ffmpeg
 
 # Check if ffmpeg is installed
-if ! command -v ffmpeg &> /dev/null; then
+if ! command -v ffmpeg &>/dev/null; then
     echo "ffmpeg is not installed. Please install it first."
     exit 1
 fi
@@ -22,4 +26,3 @@ mkdir -p "$output_dir"
 ffmpeg -i "$input_file" -c:v copy -c:a copy -map 0 -f segment -segment_time 00:30:00 -reset_timestamps 1 -segment_format avi "$output_dir/output_%03d.avi"
 
 echo "AVI file has been split into smaller chunks in the '$output_dir' directory."
-

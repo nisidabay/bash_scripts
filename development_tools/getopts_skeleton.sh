@@ -1,5 +1,9 @@
-#!/usr/bin/bash
-# Ansi color code global variables
+#!/usr/bin/env bash
+#
+# Skeleton demonstrating getopts usage.
+#
+# Dependencies: none
+
 expand_bg="\e[K"
 blue_bg="\e[0;104m${expand_bg}"
 red_bg="\e[0;101m${expand_bg}"
@@ -20,11 +24,11 @@ reset="\033[0m\e[0m"
 
 function show_help() {
 
-  echo -e "${turquoise}Usage: $0 -u user -p password -h [show_help]${reset}"
-  echo -e "${green}Prompt for a user and a password${reset}"
-  echo -e "${green}   -u User name on the system${reset}"
-  echo -e "${green}   -p User's password${reset}"
-  echo -e "${green}   -h Show this message and exit${reset}"
+    echo -e "${turquoise}Usage: $0 -u user -p password -h [show_help]${reset}"
+    echo -e "${green}Prompt for a user and a password${reset}"
+    echo -e "${green}   -u User name on the system${reset}"
+    echo -e "${green}   -p User's password${reset}"
+    echo -e "${green}   -h Show this message and exit${reset}"
 }
 
 function _Processin_args() {
@@ -34,30 +38,34 @@ function _Processin_args() {
 }
 
 opt_counter=0
-while getopts :hu:p: option
-do
-  case $option in
-    u) user=$OPTARG ;let opt_counter+=1
+while getopts :hu:p: option; do
+    case $option in
+    u)
+        user=$OPTARG
+        let opt_counter+=1
         ;;
 
-    p) pass=$OPTARG ;let opt_counter+=1
+    p)
+        pass=$OPTARG
+        let opt_counter+=1
         ;;
 
-    h) show_help;;
+    h) show_help ;;
 
-    \?) echo -e "${red}[-] Invalid option: -${OPTARG}${reset}"
+    \?)
+        echo -e "${red}[-] Invalid option: -${OPTARG}${reset}"
         show_help
         exit 1
         ;;
-        
-    :)  echo -e "${red}[-] Missing value for the argument: -${OPTARG}${reset}"
+
+    :)
+        echo -e "${red}[-] Missing value for the argument: -${OPTARG}${reset}"
         show_help
         exit 1
         ;;
-  esac
+    esac
 done
 shift $((OPTIND - 1))
-
 
 [ $opt_counter -eq 0 ] && show_help && exit 1
 

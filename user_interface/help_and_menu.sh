@@ -1,9 +1,10 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# Help and menu template
+# Help and menu template.
+#
 
-function show_help(){
-cat << EOF
+function show_help() {
+    cat <<EOF
 🎶 💾 🔒💾 Utility to encrypt USB Devices
 
         Usage: usb_encrypt.sh 
@@ -17,36 +18,36 @@ EOF
 }
 
 opt_counter=0
-while getopts ":hb:e:v" option;do
-  case $option in
-    b) 
+while getopts ":hb:e:v" option; do
+    case $option in
+    b)
         rate=${OPTARG:-$rate}
         do_set_bitrate $rate
-        (( opt_counter+=1 ))
+        ((opt_counter += 1))
         ;;
-    e) 
+    e)
         ext=${OPTARG:-$ext}
-        (( opt_counter+=1 ))
+        ((opt_counter += 1))
         ;;
-    v) 
+    v)
         verbose=true
-        (( opt_counter+=1 ))
+        ((opt_counter += 1))
         ;;
-    h) 
+    h)
         show_help
-        (( opt_counter+=1 ))
+        ((opt_counter += 1))
         ;;
-    \?) 
-        echo  Invalid option
+    \?)
+        echo Invalid option
         show_help
         ;;
     *)
         echo Missing option argument
         show_help
         ;;
-  esac
+    esac
 done
 
-if [[ $opt_counter != 1 ]];then
+if [[ $opt_counter != 1 ]]; then
     show_help
 fi

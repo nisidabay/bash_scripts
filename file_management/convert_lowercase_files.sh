@@ -1,14 +1,14 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
-#Convert upper-case to lower-case files
+# Convert upper-case file names to lower-case.
+#
+# Dependencies: tr, mv
 
-for file in *.test
-do
-    lcase=$(echo "$file" | tr '[A-Z' '[:lower:]')
-    # If lower case already skip
-	[ -f "$lcase" ] && continue
+for file in *.test; do
+    lcase=$(echo "$file" | tr '[:upper:]' '[:lower:]')
+    [ -f "$lcase" ] && continue
 
-	[ "$file" != "$lcase" ]
+    [ "$file" != "$lcase" ]
 
-	mv "$file" "$lcase"
-done 	
+    mv "$file" "$lcase"
+done

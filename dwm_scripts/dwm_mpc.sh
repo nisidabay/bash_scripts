@@ -1,13 +1,11 @@
-#!/bin/sh
-
-# A dwm_bar function that shows the current artist, track, position, duration, and status from mpc
-# Joe Standring <git@joestandring.com>
-# GNU GPLv3
-
+#!/usr/bin/env bash
+#
+# Show mpc playback status.
+#
 # Dependencies: mpc
 
-dwm_mpc () {
-    if ps -C mpd > /dev/null; then
+dwm_mpc() {
+    if ps -C mpd >/dev/null; then
         ARTIST=$(mpc current -f %artist%)
         TRACK=$(mpc current -f %title%)
         POSITION=$(mpc status | grep "%)" | awk '{ print $3 }' | awk -F/ '{ print $1 }')
@@ -40,7 +38,7 @@ dwm_mpc () {
                 SHUFFLE=""
             fi
         fi
-        
+
         printf "%s%s %s - %s %s/%s%s%s" "$SEP1" "$STATUS" "$ARTIST" "$TRACK" "$POSITION" "$DURATION" "$SHUFFLE" "$SEP2"
     fi
 }

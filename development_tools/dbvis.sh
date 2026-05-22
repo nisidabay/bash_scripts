@@ -1,4 +1,8 @@
-#!/usr/bin/bash
-# Execute dbvisualizer
-cd ~/DbVisualizer || exit 
+#!/usr/bin/env bash
+#
+# Execute DbVisualizer.
+#
+# Dependencies: dbvis
+
+cd ~/DbVisualizer || exit
 ./dbvis &

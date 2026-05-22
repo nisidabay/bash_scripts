@@ -1,99 +1,91 @@
-#!/bin/bash -e
-###################
-# ARRAY UTILITIES #
-###################
-function arrayToParameters()
-{
-# The arrayToParameters function takes an array of elements as input and returns
-# a string representation of the elements separated by space and enclosed within
-# single quotes. 
-# 
-# Here's an example of how it can be used: 
-# 
-# array=(apple banana cherry)
-# params=$(arrayToParameters "${array[@]}")
-# echo $params
-# 
-# Output 
-# 
-# 'apple' 'banana' 'cherry'
+#!/usr/bin/env bash
+#
+# Collection of bash utility functions.
+#
+# Dependencies: bash, curl, jq, python, sed, awk, tar, unzip, lsof, iptables, dd, git, md5sum
+
+function arrayToParameters() {
+    # The arrayToParameters function takes an array of elements as input and returns
+    # a string representation of the elements separated by space and enclosed within
+    # single quotes.
+    #
+    # Here's an example of how it can be used:
+    #
+    # array=(apple banana cherry)
+    # params=$(arrayToParameters "${array[@]}")
+    # echo $params
+    #
+    # Output
+    #
+    # 'apple' 'banana' 'cherry'
 
     local -r array=("${@}")
     local -r string="$(printf "'%s' " "${array[@]}")"
-    echo "${string:0:${#string} - 1}"
+    echo "${string:0:${#string}-1}"
 }
-function arrayToString()
-{
+function arrayToString() {
     local -r array=("${@}")
     arrayToStringWithDelimiter ',' "${array[@]}"
 }
-function arrayToStringWithDelimiter()
-{
-# This is a Bash function that takes a delimiter as its first argument and an
-# array of strings as the remaining arguments. It concatenates the elements of
-# the array into a single string with the delimiter separating each element. The
-# resulting string is then returned by the function, with the final delimiter
-# removed.
+function arrayToStringWithDelimiter() {
+    # This is a Bash function that takes a delimiter as its first argument and an
+    # array of strings as the remaining arguments. It concatenates the elements of
+    # the array into a single string with the delimiter separating each element. The
+    # resulting string is then returned by the function, with the final delimiter
+    # removed.
 
-# Usage: 
-# my_array=("apple" "banana" "cherry" "date") arrayToStringWithDelimiter ","
-# "${my_array[@]}"
-#
-# Output: 
-# apple,banana,cherry,date
+    # Usage:
+    # my_array=("apple" "banana" "cherry" "date") arrayToStringWithDelimiter ","
+    # "${my_array[@]}"
+    #
+    # Output:
+    # apple,banana,cherry,date
 
     local -r delimiter="${1}"
     local -r list=("${@:2}")
     local -r string="$(printf "%s${delimiter}" "${list[@]}")"
-    echo "${string:0:${#string} - ${#delimiter}}"
+    echo "${string:0:${#string}-${#delimiter}}"
 }
-function excludeElementFromArray()
-{
-# This is a Bash function that takes an item to remove from an array as its
-# first argument and an array of strings as the remaining arguments. It then
-# remove the item from  the array and return the resulting array.
+function excludeElementFromArray() {
+    # This is a Bash function that takes an item to remove from an array as its
+    # first argument and an array of strings as the remaining arguments. It then
+    # remove the item from  the array and return the resulting array.
 
-# Usage: 
-#
-# array=("carlos" "clara" "sergio" "dani")
-# excludeElementFromArray "carlos" "${array[@]}"
-#
-# Output: 
-# clara sergio dani
+    # Usage:
+    #
+    # array=("carlos" "clara" "sergio" "dani")
+    # excludeElementFromArray "carlos" "${array[@]}"
+    #
+    # Output:
+    # clara sergio dani
 
     local -r element="${1}"
     local array=("${@:2}")
     local i=0
-    for ((i = 0; i < ${#array[@]}; i = i + 1))
-    do
-        if [[ "${array[i]}" = "${element}" ]]
-        then
+    for ((i = 0; i < ${#array[@]}; i = i + 1)); do
+        if [[ "${array[i]}" = "${element}" ]]; then
             unset "array[${i}]"
         fi
     done
     echo "${array[@]}"
 }
-function isElementInArray()
-{
+function isElementInArray() {
     local -r element="${1}"
     local -r array=("${@:2}")
     local walker=''
-    for walker in "${array[@]}"
-    do
+    for walker in "${array[@]}"; do
         [[ "${walker}" = "${element}" ]] && echo 'true' && return 0
     done
     echo 'false' && return 1
 }
-function sortUniqArray()
-{
+function sortUniqArray() {
     local -r array=("${@}")
-    trimString "$(tr ' ' '\n' <<< "${array[@]}" | sort -u | tr '\n' ' ')"
+    trimString "$(tr ' ' '\n' <<<"${array[@]}" | sort -u | tr '\n' ' ')"
 }
 #####################
 # COMPILE UTILITIES #
 #####################
-function compileAndInstallFromSource()
-{
+function compileAndInstallFromSource() {
     local -r downloadURL="${1}"
     local -r installFolderPath="${2}"
     local -r installFileOrFolderBinPath="${3}"
@@ -114,39 +106,31 @@ function compileAndInstallFromSource()
 #######################
 # DATE TIME UTILITIES #
 #######################
-function convertISO8601ToSeconds()
-{
+function convertISO8601ToSeconds() {
     local -r time="${1}"
-    if [[ "$(isMacOperatingSystem)" = 'true' ]]
-    then
-        date -j -u -f '%FT%T' "$(awk -F '.' '{ print $1 }' <<< "${time}" | tr -d 'Z')" +'%s'
-    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' || "$(isUbuntuDistributor)" = 'true' ]]
-    then
+    if [[ "$(isMacOperatingSystem)" = 'true' ]]; then
+        date -j -u -f '%FT%T' "$(awk -F '.' '{ print $1 }' <<<"${time}" | tr -d 'Z')" +'%s'
+    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' || "$(isUbuntuDistributor)" = 'true' ]]; then
         date -d "${time}" +'%s'
     else
         fatal '\nFATAL : only support Amazon-Linux, CentOS, Mac, RedHat, or Ubuntu OS'
     fi
 }
-function getISO8601DateTimeNow()
-{
+function getISO8601DateTimeNow() {
     date -u +'%Y-%m-%dT%H:%M:%SZ'
 }
-function getUTCNowInSeconds()
-{
+function getUTCNowInSeconds() {
     date -u +'%s'
 }
-function secondsToReadableTime()
-{
+function secondsToReadableTime() {
     local -r time="${1}"
     local -r day="$((time / 60 / 60 / 24))"
     local -r hour="$((time / 60 / 60 % 24))"
     local -r minute="$((time / 60 % 60))"
     local -r second="$((time % 60))"
-    if [[ "${day}" = '0' ]]
-    then
+    if [[ "${day}" = '0' ]]; then
         printf '%02d:%02d:%02d' "${hour}" "${minute}" "${second}"
-    elif [[ "${day}" = '1' ]]
-    then
+    elif [[ "${day}" = '1' ]]; then
         printf '%d day and %02d:%02d:%02d' "${day}" "${hour}" "${minute}" "${second}"
     else
         printf '%d days and %02d:%02d:%02d' "${day}" "${hour}" "${minute}" "${second}"
@@ -155,8 +139,7 @@ function secondsToReadableTime()
 ########################
 # FILE LOCAL UTILITIES #
 ########################
-function appendToFileIfNotFound()
-{
+function appendToFileIfNotFound() {
     local -r file="${1}"
     local -r pattern="${2}"
     local -r string="${3}"
@@ -169,89 +152,71 @@ function appendToFileIfNotFound()
     checkNonEmptyString "${string}" 'undefined string'
     checkTrueFalseString "${patternAsRegex}"
     checkTrueFalseString "${stringAsRegex}"
-    if [[ "${stringAsRegex}" = 'false' ]]
-    then
+    if [[ "${stringAsRegex}" = 'false' ]]; then
         checkTrueFalseString "${addNewLine}"
     fi
     # Append String
-    if [[ "${patternAsRegex}" = 'true' ]]
-    then
+    if [[ "${patternAsRegex}" = 'true' ]]; then
         local -r found="$(grep -E -o "${pattern}" "${file}")"
     else
         local -r found="$(grep -F -o "${pattern}" "${file}")"
     fi
-    if [[ "$(isEmptyString "${found}")" = 'true' ]]
-    then
-        if [[ "${stringAsRegex}" = 'true' ]]
-        then
-            echo -e "${string}" >> "${file}"
+    if [[ "$(isEmptyString "${found}")" = 'true' ]]; then
+        if [[ "${stringAsRegex}" = 'true' ]]; then
+            echo -e "${string}" >>"${file}"
         else
-            if [[ "${addNewLine}" = 'true' ]]
-            then
-                echo >> "${file}"
+            if [[ "${addNewLine}" = 'true' ]]; then
+                echo >>"${file}"
             fi
-            echo "${string}" >> "${file}"
+            echo "${string}" >>"${file}"
         fi
     fi
 }
-function checkExistFile()
-{
+function checkExistFile() {
     local -r file="${1}"
     local -r errorMessage="${2}"
-    if [[ "${file}" = '' || ! -f "${file}" ]]
-    then
-        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]
-        then
+    if [[ "${file}" = '' || ! -f "${file}" ]]; then
+        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]; then
             fatal "\nFATAL : file '${file}' not found"
         fi
         fatal "\nFATAL : ${errorMessage}"
     fi
 }
-function checkExistFolder()
-{
+function checkExistFolder() {
     local -r folder="${1}"
     local -r errorMessage="${2}"
-    if [[ "${folder}" = '' || ! -d "${folder}" ]]
-    then
-        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]
-        then
+    if [[ "${folder}" = '' || ! -d "${folder}" ]]; then
+        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]; then
             fatal "\nFATAL : folder '${folder}' not found"
         fi
         fatal "\nFATAL : ${errorMessage}"
     fi
 }
-function checkValidJSONContent()
-{
+function checkValidJSONContent() {
     local -r content="${1}"
-    if [[ "$(isValidJSONContent "${content}")" = 'false' ]]
-    then
+    if [[ "$(isValidJSONContent "${content}")" = 'false' ]]; then
         fatal '\nFATAL : invalid JSON'
     fi
 }
-function checkValidJSONFile()
-{
+function checkValidJSONFile() {
     local -r file="${1}"
-    if [[ "$(isValidJSONFile "${file}")" = 'false' ]]
-    then
+    if [[ "$(isValidJSONFile "${file}")" = 'false' ]]; then
         fatal "\nFATAL : invalid JSON file '${file}'"
     fi
 }
-function cleanUpSystemFolders()
-{
+function cleanUpSystemFolders() {
     header 'CLEANING UP SYSTEM FOLDERS'
     local -r folders=(
         '/tmp'
         '/var/tmp'
     )
     local folder=''
-    for folder in "${folders[@]}"
-    do
+    for folder in "${folders[@]}"; do
         echo "Cleaning up folder '${folder}'"
         emptyFolder "${folder}"
     done
 }
-function copyFolderContent()
-{
+function copyFolderContent() {
     local -r sourceFolder="${1}"
     local -r destinationFolder="${2}"
     checkExistFolder "${sourceFolder}"
@@ -261,17 +226,15 @@ function copyFolderContent()
         -maxdepth 1 \
         -exec cp -p -r '{}' "${destinationFolder}" \;
 }
-function createAbsoluteUsrBin()
-{
+function createAbsoluteUsrBin() {
     local -r binFileName="${1}"
     local -r sourceFilePath="${2}"
     checkExistFile "${sourceFilePath}"
     mkdir -p '/usr/bin'
-    printf "#!/bin/bash -e\n\n'%s' \"\${@}\"" "${sourceFilePath}" > "/usr/bin/${binFileName}"
+    printf "#!/bin/bash -e\n\n'%s' \"\${@}\"" "${sourceFilePath}" >"/usr/bin/${binFileName}"
     chmod 755 "/usr/bin/${binFileName}"
 }
-function createFileFromTemplate()
-{
+function createFileFromTemplate() {
     local -r sourceFile="${1}"
     local -r destinationFile="${2}"
     local -r oldNewData=("${@:3}")
@@ -280,14 +243,12 @@ function createFileFromTemplate()
     local content=''
     content="$(cat "${sourceFile}")"
     local i=0
-    for ((i = 0; i < ${#oldNewData[@]}; i = i + 2))
-    do
+    for ((i = 0; i < ${#oldNewData[@]}; i = i + 2)); do
         content="$(replaceString "${content}" "${oldNewData[${i}]}" "${oldNewData[${i} + 1]}")"
     done
-    echo "${content}" > "${destinationFile}"
+    echo "${content}" >"${destinationFile}"
 }
-function createInitFileFromTemplate()
-{
+function createInitFileFromTemplate() {
     local -r serviceName="${1}"
     local -r templateFolderPath="${2}"
     local -r initConfigDataFromTemplate=("${@:3}")
@@ -296,118 +257,99 @@ function createInitFileFromTemplate()
         "/etc/systemd/system/${serviceName}.service" \
         "${initConfigDataFromTemplate[@]}"
 }
-function deleteOldLogs()
-{
+function deleteOldLogs() {
     local logFolderPaths=("${@}")
     header 'DELETING OLD LOGS'
     # Default Log Folder Path
-    if [[ "${#logFolderPaths[@]}" -lt '1' ]]
-    then
+    if [[ "${#logFolderPaths[@]}" -lt '1' ]]; then
         logFolderPaths+=('/var/log')
     fi
     # Walk Each Log Folder Path
     local i=0
-    for ((i = 0; i < ${#logFolderPaths[@]}; i = i + 1))
-    do
+    for ((i = 0; i < ${#logFolderPaths[@]}; i = i + 1)); do
         checkExistFolder "${logFolderPaths[i]}"
         find \
             -L \
             "${logFolderPaths[i]}" \
             -type f \
             \( \
-                -regex '.*-[0-9]+' -o \
-                -regex '.*\.[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\.log' -o \
-                -regex '.*\.[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\.txt' -o \
-                -regex '.*\.[0-9]+' -o \
-                -regex '.*\.[0-9]+\.log' -o \
-                -regex '.*\.gz' -o \
-                -regex '.*\.log\.[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]T[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' -o \
-                -regex '.*\.old' -o \
-                -regex '.*\.xz' \
+            -regex '.*-[0-9]+' -o \
+            -regex '.*\.[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\.log' -o \
+            -regex '.*\.[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]\.txt' -o \
+            -regex '.*\.[0-9]+' -o \
+            -regex '.*\.[0-9]+\.log' -o \
+            -regex '.*\.gz' -o \
+            -regex '.*\.log\.[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]T[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]' -o \
+            -regex '.*\.old' -o \
+            -regex '.*\.xz' \
             \) \
             -delete \
             -print
     done
 }
-function emptyFolder()
-{
+function emptyFolder() {
     local -r folder="${1}"
     checkExistFolder "${folder}"
     find "${folder}" \
         -mindepth 1 \
         -delete
 }
-function getFileExtension()
-{
+function getFileExtension() {
     local -r string="${1}"
     local -r fullFileName="$(basename "${string}")"
     echo "${fullFileName##*.}"
 }
-function getFileName()
-{
+function getFileName() {
     local -r string="${1}"
     local -r fullFileName="$(basename "${string}")"
     echo "${fullFileName%.*}"
 }
-function getTemporaryFile()
-{
+function getTemporaryFile() {
     local extension="${1}"
-    if [[ "$(isEmptyString "${extension}")" = 'false' && "$(grep -i -o "^." <<< "${extension}")" != '.' ]]
-    then
+    if [[ "$(isEmptyString "${extension}")" = 'false' && "$(grep -i -o "^." <<<"${extension}")" != '.' ]]; then
         extension=".${extension}"
     fi
     mktemp "$(getTemporaryFolderRoot)/$(date +'%Y%m%d-%H%M%S')-XXXXXXXXXX${extension}"
 }
-function getTemporaryFolder()
-{
+function getTemporaryFolder() {
     mktemp -d "$(getTemporaryFolderRoot)/$(date +'%Y%m%d-%H%M%S')-XXXXXXXXXX"
 }
-function getTemporaryFolderRoot()
-{
+function getTemporaryFolderRoot() {
     local temporaryFolder='/tmp'
-    if [[ "$(isEmptyString "${TMPDIR}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${TMPDIR}")" = 'false' ]]; then
         temporaryFolder="$(formatPath "${TMPDIR}")"
     fi
     echo "${temporaryFolder}"
 }
-function initializeFolder()
-{
+function initializeFolder() {
     local -r folder="${1}"
-    if [[ -d "${folder}" ]]
-    then
+    if [[ -d "${folder}" ]]; then
         emptyFolder "${folder}"
     else
         mkdir -p "${folder}"
     fi
 }
-function isEmptyFolder()
-{
+function isEmptyFolder() {
     local -r folderPath="${1}"
     checkExistFolder "${folderPath}"
-    if [[ "$(isEmptyString "$(find "${folderPath}" -maxdepth 1 -mindepth 1)")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "$(find "${folderPath}" -maxdepth 1 -mindepth 1)")" = 'true' ]]; then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
 }
-function isValidJSONContent()
-{
+function isValidJSONContent() {
     local -r content="${1}"
-    if ( python -m 'json.tool' <<< "${content}" &> '/dev/null' )
-    then
+    if (python -m 'json.tool' <<<"${content}" &>'/dev/null'); then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
 }
-function isValidJSONFile()
-{
+function isValidJSONFile() {
     local -r file="${1}"
     checkExistFile "${file}"
     isValidJSONContent "$(cat "${file}")"
 }
-function moveFolderContent()
-{
+function moveFolderContent() {
     local -r sourceFolder="${1}"
     local -r destinationFolder="${2}"
     checkExistFolder "${sourceFolder}"
@@ -417,14 +359,12 @@ function moveFolderContent()
         -maxdepth 1 \
         -exec mv '{}' "${destinationFolder}" \;
 }
-function redirectOutputToLogFile()
-{
+function redirectOutputToLogFile() {
     local -r logFile="${1}"
     mkdir -p "$(dirname "${logFile}")"
     exec > >(tee -a "${logFile}") 2>&1
 }
-function resetFolderPermission()
-{
+function resetFolderPermission() {
     local -r folderPath="${1}"
     local -r userLogin="${2}"
     local -r groupName="${3}"
@@ -436,26 +376,24 @@ function resetFolderPermission()
     find "${folderPath}" \
         -type d \
         \( \
-            -not -path "*/.git" -a \
-            -not -path "*/.git/*" \
+        -not -path "*/.git" -a \
+        -not -path "*/.git/*" \
         \) \
         -exec chmod 700 '{}' \; \
         -print
     find "${folderPath}" \
         -type f \
         \( \
-            -not -path "*/.git" -a \
-            -not -path "*/.git/*" \
+        -not -path "*/.git" -a \
+        -not -path "*/.git/*" \
         \) \
         -exec chmod 600 '{}' \; \
         -print
 }
-function resetLogs()
-{
+function resetLogs() {
     local logFolderPaths=("${@}")
     # Default Log Folder Path
-    if [[ "${#logFolderPaths[@]}" -lt '1' ]]
-    then
+    if [[ "${#logFolderPaths[@]}" -lt '1' ]]; then
         logFolderPaths+=('/var/log')
     fi
     # Delete Old Logs
@@ -463,8 +401,7 @@ function resetLogs()
     # Reset Logs
     header 'RESETTING LOGS'
     local i=0
-    for ((i = 0; i < ${#logFolderPaths[@]}; i = i + 1))
-    do
+    for ((i = 0; i < ${#logFolderPaths[@]}; i = i + 1)); do
         checkExistFolder "${logFolderPaths[i]}"
         find "${logFolderPaths[i]}" \
             -type f \
@@ -472,31 +409,25 @@ function resetLogs()
             -print
     done
 }
-function sortUniqueTrimFile()
-{
+function sortUniqueTrimFile() {
     local -r filePath="${1}"
     checkExistFile "${filePath}"
-    printf '%s' "$(awk 'NF' "${filePath}" | awk '{$1=$1};1' | sort -u)" > "${filePath}"
+    printf '%s' "$(awk 'NF' "${filePath}" | awk '{$1=$1};1' | sort -u)" >"${filePath}"
 }
-function symlinkListUsrBin()
-{
+function symlinkListUsrBin() {
     local -r sourceFilePaths=("${@}")
     local sourceFilePath=''
-    for sourceFilePath in "${sourceFilePaths[@]}"
-    do
+    for sourceFilePath in "${sourceFilePaths[@]}"; do
         chmod 755 "${sourceFilePath}"
         rm -f -r "/usr/bin/$(basename "${sourceFilePath}")"
         ln -f -s "${sourceFilePath}" "/usr/bin/$(basename "${sourceFilePath}")"
     done
 }
-function symlinkUsrBin()
-{
+function symlinkUsrBin() {
     local -r sourceBinFileOrFolder="${1}"
-    if [[ "$(isMacOperatingSystem)" = 'true' ]]
-    then
+    if [[ "$(isMacOperatingSystem)" = 'true' ]]; then
         mkdir -p '/usr/bin'
-        if [[ -d "${sourceBinFileOrFolder}" ]]
-        then
+        if [[ -d "${sourceBinFileOrFolder}" ]]; then
             find "${sourceBinFileOrFolder}" -maxdepth 1 \( -type f -o -type l \) -perm -u+x -exec bash -c -e '
                 for file
                 do
@@ -513,24 +444,20 @@ function symlinkUsrBin()
                         fi
                     fi
                 done' bash '{}' \;
-        elif [[ -f "${sourceBinFileOrFolder}" ]]
-        then
+        elif [[ -f "${sourceBinFileOrFolder}" ]]; then
             ln -f -s "${sourceBinFileOrFolder}" "/usr/bin/$(basename "${sourceBinFileOrFolder}")"
         else
             fatal "\nFATAL : '${sourceBinFileOrFolder}' is not directory or file"
         fi
-    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' || "$(isUbuntuDistributor)" = 'true' ]]
-    then
+    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' || "$(isUbuntuDistributor)" = 'true' ]]; then
         mkdir -p '/usr/bin'
-        if [[ -d "${sourceBinFileOrFolder}" ]]
-        then
+        if [[ -d "${sourceBinFileOrFolder}" ]]; then
             find "${sourceBinFileOrFolder}" -maxdepth 1 -xtype f -perm -u+x -exec bash -c -e '
                 for file
                 do
                     ln -f -s "${file}" "/usr/bin/$(basename "${file}")"
                 done' bash '{}' \;
-        elif [[ -f "${sourceBinFileOrFolder}" ]]
-        then
+        elif [[ -f "${sourceBinFileOrFolder}" ]]; then
             ln -f -s "${sourceBinFileOrFolder}" "/usr/bin/$(basename "${sourceBinFileOrFolder}")"
         else
             fatal "\nFATAL : '${sourceBinFileOrFolder}' is not directory or file"
@@ -539,72 +466,60 @@ function symlinkUsrBin()
         fatal '\nFATAL : only support Amazon-Linux, CentOS, Mac, RedHat, or Ubuntu OS'
     fi
 }
-function trimFile()
-{
+function trimFile() {
     local -r filePath="${1}"
     checkExistFile "${filePath}"
-    printf '%s' "$(< "${filePath}")" > "${filePath}"
+    printf '%s' "$(<"${filePath}")" >"${filePath}"
 }
 #########################
 # FILE REMOTE UTILITIES #
 #########################
-function checkExistURL()
-{
+function checkExistURL() {
     local -r url="${1}"
-    if [[ "$(existURL "${url}")" = 'false' ]]
-    then
+    if [[ "$(existURL "${url}")" = 'false' ]]; then
         fatal "\nFATAL : url '${url}' not found"
     fi
 }
-function downloadFile()
-{
+function downloadFile() {
     local -r url="${1}"
     local -r destinationFile="${2}"
     local overwrite="${3}"
     checkExistURL "${url}"
     # Check Overwrite
-    if [[ "$(isEmptyString "${overwrite}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${overwrite}")" = 'true' ]]; then
         overwrite='false'
     fi
     checkTrueFalseString "${overwrite}"
     # Validate
-    if [[ -f "${destinationFile}" ]]
-    then
-        if [[ "${overwrite}" = 'false' ]]
-        then
+    if [[ -f "${destinationFile}" ]]; then
+        if [[ "${overwrite}" = 'false' ]]; then
             fatal "\nFATAL : file '${destinationFile}' found"
         fi
         rm -f "${destinationFile}"
-    elif [[ -e "${destinationFile}" ]]
-    then
+    elif [[ -e "${destinationFile}" ]]; then
         fatal "\nFATAL : file '${destinationFile}' already exists"
     fi
     # Download
     debug "\nDownloading '${url}' to '${destinationFile}'\n"
     curl -L "${url}" -o "${destinationFile}" --retry 12 --retry-delay 5
 }
-function existURL()
-{
+function existURL() {
     local -r url="${1}"
     # Install Curl
-    installCURLCommand > '/dev/null'
+    installCURLCommand >'/dev/null'
     # Check URL
-    if ( curl -f --head -L "${url}" -o '/dev/null' -s --retry 12 --retry-delay 5 ||
-         curl -f -L "${url}" -o '/dev/null' -r 0-0 -s --retry 12 --retry-delay 5 )
-    then
+    if (curl -f --head -L "${url}" -o '/dev/null' -s --retry 12 --retry-delay 5 ||
+        curl -f -L "${url}" -o '/dev/null' -r 0-0 -s --retry 12 --retry-delay 5); then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
 }
-function getRemoteFileContent()
-{
+function getRemoteFileContent() {
     local -r url="${1}"
     checkExistURL "${url}"
     curl -s -X 'GET' -L "${url}" --retry 12 --retry-delay 5
 }
-function unzipRemoteFile()
-{
+function unzipRemoteFile() {
     local -r downloadURL="${1}"
     local -r installFolder="${2}"
     local extension="${3}"
@@ -614,32 +529,27 @@ function unzipRemoteFile()
     checkExistURL "${downloadURL}"
     # Find Extension
     local exExtension=''
-    if [[ "$(isEmptyString "${extension}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${extension}")" = 'true' ]]; then
         extension="$(getFileExtension "${downloadURL}")"
-        exExtension="$(rev <<< "${downloadURL}" | cut -d '.' -f 1-2 | rev)"
+        exExtension="$(rev <<<"${downloadURL}" | cut -d '.' -f 1-2 | rev)"
     fi
     # Unzip
-    if [[ "$(grep -i '^tgz$' <<< "${extension}")" != '' || "$(grep -i '^tar\.gz$' <<< "${extension}")" != '' || "$(grep -i '^tar\.gz$' <<< "${exExtension}")" != '' ]]
-    then
+    if [[ "$(grep -i '^tgz$' <<<"${extension}")" != '' || "$(grep -i '^tar\.gz$' <<<"${extension}")" != '' || "$(grep -i '^tar\.gz$' <<<"${exExtension}")" != '' ]]; then
         debug "\nDownloading '${downloadURL}'\n"
         curl -L "${downloadURL}" --retry 12 --retry-delay 5 | tar -C "${installFolder}" -x -z --strip 1
         echo
-    elif [[ "$(grep -i '^tar\.bz2$' <<< "${exExtension}")" != '' ]]
-    then
+    elif [[ "$(grep -i '^tar\.bz2$' <<<"${exExtension}")" != '' ]]; then
         # Install BZip2
         installBZip2Command
         # Unzip
         debug "\nDownloading '${downloadURL}'\n"
         curl -L "${downloadURL}" --retry 12 --retry-delay 5 | tar -C "${installFolder}" -j -x --strip 1
         echo
-    elif [[ "$(grep -i '^zip$' <<< "${extension}")" != '' ]]
-    then
+    elif [[ "$(grep -i '^zip$' <<<"${extension}")" != '' ]]; then
         # Install Unzip
         installUnzipCommand
         # Unzip
-        if [[ "$(existCommand 'unzip')" = 'false' ]]
-        then
+        if [[ "$(existCommand 'unzip')" = 'false' ]]; then
             fatal 'FATAL : command unzip not found'
         fi
         local -r zipFile="${installFolder}/$(basename "${downloadURL}")"
@@ -654,25 +564,21 @@ function unzipRemoteFile()
 #################
 # GIT UTILITIES #
 #################
-function checkValidGitToken()
-{
+function checkValidGitToken() {
     local -r user="${1}"
     local -r token="${2}"
     local -r gitURL="${3}"
-    if [[ "$(isValidGitToken "${user}" "${token}" "${gitURL}")" = 'false' ]]
-    then
+    if [[ "$(isValidGitToken "${user}" "${token}" "${gitURL}")" = 'false' ]]; then
         fatal '\nFATAL : invalid token'
     fi
 }
-function getGitOrganizationMembers()
-{
+function getGitOrganizationMembers() {
     local -r user="${1}"
     local -r token="${2}"
     local -r orgName="${3}"
     local gitURL="${4}"
     # Default Values
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Validation
@@ -681,8 +587,7 @@ function getGitOrganizationMembers()
     local members='[]'
     local page=1
     local exitCount=0
-    for ((page = 1; page > exitCount; page = page + 1))
-    do
+    for ((page = 1; page > exitCount; page = page + 1)); do
         local currentMembers=''
         currentMembers="$(
             curl \
@@ -692,13 +597,12 @@ function getGitOrganizationMembers()
                 -L "${gitURL}/orgs/${orgName}/members?page=${page}&per_page=100" \
                 --retry 12 \
                 --retry-delay 5 |
-            jq \
-                --compact-output \
-                --raw-output \
-                '. // empty'
+                jq \
+                    --compact-output \
+                    --raw-output \
+                    '. // empty'
         )"
-        if [[ "${currentMembers}" = '[]' ]]
-        then
+        if [[ "${currentMembers}" = '[]' ]]; then
             echo "${members}"
             exitCount="$((page + 1))"
         else
@@ -714,15 +618,13 @@ function getGitOrganizationMembers()
         fi
     done
 }
-function getGitOrganizationTeams()
-{
+function getGitOrganizationTeams() {
     local -r user="${1}"
     local -r token="${2}"
     local -r orgName="${3}"
     local gitURL="${4}"
     # Default Values
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Validation
@@ -732,8 +634,7 @@ function getGitOrganizationTeams()
     local teams='[]'
     local page=1
     local exitCount=0
-    for ((page = 1; page > exitCount; page = page + 1))
-    do
+    for ((page = 1; page > exitCount; page = page + 1)); do
         local currentTeams=''
         currentTeams="$(
             curl \
@@ -743,13 +644,12 @@ function getGitOrganizationTeams()
                 -L "${gitURL}/orgs/${orgName}/teams?page=${page}&per_page=100" \
                 --retry 12 \
                 --retry-delay 5 |
-            jq \
-                --compact-output \
-                --raw-output \
-                '. // empty'
+                jq \
+                    --compact-output \
+                    --raw-output \
+                    '. // empty'
         )"
-        if [[ "${currentTeams}" = '[]' ]]
-        then
+        if [[ "${currentTeams}" = '[]' ]]; then
             echo "${teams}"
             exitCount="$((page + 1))"
         else
@@ -765,32 +665,28 @@ function getGitOrganizationTeams()
         fi
     done
 }
-function getGitPrivateRepositorySSHURL()
-{
+function getGitPrivateRepositorySSHURL() {
     local -r user="${1}"
     local -r token="${2}"
     local -r orgName="${3}"
     local -r gitURL="${4}"
     getGitUserRepositoryObjectKey "${user}" "${token}" 'ssh_url' 'private' "${orgName}" "${gitURL}"
 }
-function getGitPublicRepositorySSHURL()
-{
+function getGitPublicRepositorySSHURL() {
     local -r user="${1}"
     local -r token="${2}"
     local -r orgName="${3}"
     local -r gitURL="${4}"
     getGitUserRepositoryObjectKey "${user}" "${token}" 'ssh_url' 'public' "${orgName}" "${gitURL}"
 }
-function getGitRepositoryCollaborators()
-{
+function getGitRepositoryCollaborators() {
     local -r user="${1}"
     local -r token="${2}"
     local -r orgName="${3}"
     local -r repository="${4}"
     local gitURL="${5}"
     # Default Values
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Validation
@@ -800,8 +696,7 @@ function getGitRepositoryCollaborators()
     local users='[]'
     local page=1
     local exitCount=0
-    for ((page = 1; page > exitCount; page = page + 1))
-    do
+    for ((page = 1; page > exitCount; page = page + 1)); do
         local currentUsers=''
         currentUsers="$(
             curl \
@@ -811,13 +706,12 @@ function getGitRepositoryCollaborators()
                 -L "${gitURL}/repos/${orgName}/${repository}/collaborators?affiliation=direct&page=${page}&per_page=100" \
                 --retry 12 \
                 --retry-delay 5 |
-            jq \
-                --compact-output \
-                --raw-output \
-                '. // empty'
+                jq \
+                    --compact-output \
+                    --raw-output \
+                    '. // empty'
         )"
-        if [[ "${currentUsers}" = '[]' ]]
-        then
+        if [[ "${currentUsers}" = '[]' ]]; then
             echo "${users}"
             exitCount="$((page + 1))"
         else
@@ -833,26 +727,22 @@ function getGitRepositoryCollaborators()
         fi
     done
 }
-function getGitRepositoryNameFromCloneURL()
-{
+function getGitRepositoryNameFromCloneURL() {
     local -r cloneURL="${1}"
     checkNonEmptyString "${cloneURL}" 'undefined clone url'
-    if [[ "$(grep -F -o '@' <<< "${cloneURL}")" != '' ]]
-    then
-        awk -F '/' '{ print $2 }' <<< "${cloneURL}" | rev | cut -d '.' -f 2- | rev
+    if [[ "$(grep -F -o '@' <<<"${cloneURL}")" != '' ]]; then
+        awk -F '/' '{ print $2 }' <<<"${cloneURL}" | rev | cut -d '.' -f 2- | rev
     else
-        awk -F '/' '{ print $5 }' <<< "${cloneURL}" | rev | cut -d '.' -f 2- | rev
+        awk -F '/' '{ print $5 }' <<<"${cloneURL}" | rev | cut -d '.' -f 2- | rev
     fi
 }
-function getGitTeamUsers()
-{
+function getGitTeamUsers() {
     local -r user="${1}"
     local -r token="${2}"
     local gitURL="${3}"
     local -r membersURL="${4}"
     # Default Values
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Validation
@@ -861,8 +751,7 @@ function getGitTeamUsers()
     local users='[]'
     local page=1
     local exitCount=0
-    for ((page = 1; page > exitCount; page = page + 1))
-    do
+    for ((page = 1; page > exitCount; page = page + 1)); do
         local currentUsers=''
         currentUsers="$(
             curl \
@@ -872,13 +761,12 @@ function getGitTeamUsers()
                 -L "${membersURL}?page=${page}&per_page=100" \
                 --retry 12 \
                 --retry-delay 5 |
-            jq \
-                --compact-output \
-                --raw-output \
-                '. // empty'
+                jq \
+                    --compact-output \
+                    --raw-output \
+                    '. // empty'
         )"
-        if [[ "${currentUsers}" = '[]' ]]
-        then
+        if [[ "${currentUsers}" = '[]' ]]; then
             echo "${users}"
             exitCount="$((page + 1))"
         else
@@ -894,14 +782,12 @@ function getGitTeamUsers()
         fi
     done
 }
-function getGitUserName()
-{
+function getGitUserName() {
     local -r user="${1}"
     local -r token="${2}"
     local gitURL="${3}"
     # Default Value
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Validation
@@ -914,20 +800,18 @@ function getGitUserName()
         -L "${gitURL}/user" \
         --retry 12 \
         --retry-delay 5 |
-    jq \
-        --compact-output \
-        --raw-output \
-        --sort-keys \
-        '.["name"] // empty'
+        jq \
+            --compact-output \
+            --raw-output \
+            --sort-keys \
+            '.["name"] // empty'
 }
-function getGitUserPrimaryEmail()
-{
+function getGitUserPrimaryEmail() {
     local -r user="${1}"
     local -r token="${2}"
     local gitURL="${3}"
     # Default Values
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Validation
@@ -935,8 +819,7 @@ function getGitUserPrimaryEmail()
     # Pagination
     local page=1
     local exitCount=0
-    for ((page = 1; page > exitCount; page = page + 1))
-    do
+    for ((page = 1; page > exitCount; page = page + 1)); do
         local emails=''
         emails="$(
             curl \
@@ -946,11 +829,11 @@ function getGitUserPrimaryEmail()
                 -L "${gitURL}/user/emails?page=${page}&per_page=100" \
                 --retry 12 \
                 --retry-delay 5 |
-            jq \
-                --compact-output \
-                --raw-output \
-                --sort-keys \
-                '.[] // empty' \
+                jq \
+                    --compact-output \
+                    --raw-output \
+                    --sort-keys \
+                    '.[] // empty'
         )"
         local primaryEmail=''
         primaryEmail="$(
@@ -960,17 +843,15 @@ function getGitUserPrimaryEmail()
                 --sort-keys \
                 'select(.["primary"] == true) |
                  .["email"] // empty' \
-            <<< "${emails}"
+                <<<"${emails}"
         )"
-        if [[ "$(isEmptyString "${primaryEmail}")" = 'false' || "$(isEmptyString "${emails}")" = 'true' ]]
-        then
+        if [[ "$(isEmptyString "${primaryEmail}")" = 'false' || "$(isEmptyString "${emails}")" = 'true' ]]; then
             echo "${primaryEmail}"
             exitCount="$((page + 1))"
         fi
     done
 }
-function getGitUserRepositoryObjectKey()
-{
+function getGitUserRepositoryObjectKey() {
     local -r user="${1}"
     local -r token="${2}"
     local -r objectKey="${3}"
@@ -978,8 +859,7 @@ function getGitUserRepositoryObjectKey()
     local -r orgName="${5}"
     local gitURL="${6}"
     # Default Value
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Validation
@@ -989,11 +869,9 @@ function getGitUserRepositoryObjectKey()
     local results=''
     local page=1
     local exitCount=0
-    for ((page = 1; page > exitCount; page = page + 1))
-    do
+    for ((page = 1; page > exitCount; page = page + 1)); do
         # User or Organization
-        if [[ "$(isEmptyString "${orgName}")" = 'true' ]]
-        then
+        if [[ "$(isEmptyString "${orgName}")" = 'true' ]]; then
             local targetURL="${gitURL}/user/repos?affiliation=owner&page=${page}&per_page=100&visibility=${kind}"
         else
             local targetURL="${gitURL}/orgs/${orgName}/repos?page=${page}&per_page=100&type=${kind}"
@@ -1008,19 +886,17 @@ function getGitUserRepositoryObjectKey()
                 -L "${targetURL}" \
                 --retry 12 \
                 --retry-delay 5 |
-            jq \
-                --arg jqObjectKey "${objectKey}" \
-                --compact-output \
-                --raw-output \
-                --sort-keys \
-                '.[] |
+                jq \
+                    --arg jqObjectKey "${objectKey}" \
+                    --compact-output \
+                    --raw-output \
+                    --sort-keys \
+                    '.[] |
                 .[$jqObjectKey] // empty'
         )"
-        if [[ "$(isEmptyString "${currentObjectValue}")" = 'true' ]]
-        then
+        if [[ "$(isEmptyString "${currentObjectValue}")" = 'true' ]]; then
             exitCount="$((page + 1))"
-        elif [[ "${page}" = '1' ]]
-        then
+        elif [[ "${page}" = '1' ]]; then
             results="$(printf '%s' "${currentObjectValue}")"
         else
             results="$(printf '%s\n%s' "${results}" "${currentObjectValue}")"
@@ -1029,15 +905,13 @@ function getGitUserRepositoryObjectKey()
     # Return Results
     echo "${results}" | sort -f
 }
-function isGitUserSuspended()
-{
+function isGitUserSuspended() {
     local -r user="${1}"
     local -r token="${2}"
     local gitURL="${3}"
     local -r login="${4}"
     # Default Values
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Check Status
@@ -1049,25 +923,22 @@ function isGitUserSuspended()
             -L "${gitURL}/users/${login}" \
             --retry 12 \
             --retry-delay 5 |
-        jq \
-            --compact-output \
-            --raw-output \
-            '.["suspended_at"] // empty'
+            jq \
+                --compact-output \
+                --raw-output \
+                '.["suspended_at"] // empty'
     )"
-    if [[ "$(isEmptyString "${suspendedAt}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${suspendedAt}")" = 'false' ]]; then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
 }
-function isValidGitToken()
-{
+function isValidGitToken() {
     local -r user="${1}"
     local -r token="${2}"
     local gitURL="${3}"
     # Default Values
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Validation
@@ -1079,20 +950,18 @@ function isValidGitToken()
             -L "${gitURL}" \
             --retry 12 \
             --retry-delay 5 |
-        jq \
-            --compact-output \
-            --raw-output \
-            --sort-keys \
-            '.["message"] // empty'
+            jq \
+                --compact-output \
+                --raw-output \
+                --sort-keys \
+                '.["message"] // empty'
     )"
-    if [[ "${result}" = 'Bad credentials' ]]
-    then
+    if [[ "${result}" = 'Bad credentials' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function removeGitCollaboratorFromRepository()
-{
+function removeGitCollaboratorFromRepository() {
     local -r user="${1}"
     local -r token="${2}"
     local -r gitURL="${3}"
@@ -1107,16 +976,14 @@ function removeGitCollaboratorFromRepository()
         --retry 12 \
         --retry-delay 5
 }
-function removeGitMemberFromOrganization()
-{
+function removeGitMemberFromOrganization() {
     local -r user="${1}"
     local -r token="${2}"
     local gitURL="${3}"
     local -r orgName="${4}"
     local -r member="${5}"
     # Default Values
-    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${gitURL}")" = 'true' ]]; then
         gitURL='https://api.github.com'
     fi
     # Remove Member
@@ -1128,8 +995,7 @@ function removeGitMemberFromOrganization()
         --retry 12 \
         --retry-delay 5
 }
-function removeGitUserFromTeam()
-{
+function removeGitUserFromTeam() {
     local -r user="${1}"
     local -r token="${2}"
     local -r teamURL="${3}"
@@ -1145,8 +1011,7 @@ function removeGitUserFromTeam()
 #####################
 # INSTALL UTILITIES #
 #####################
-function installPortableBinary()
-{
+function installPortableBinary() {
     local -r appTitleName="${1}"
     local -r downloadURL="${2}"
     local -r installFolderPath="${3}"
@@ -1156,8 +1021,7 @@ function installPortableBinary()
     checkNonEmptyString "${appTitleName}" 'undefined app title name'
     checkNonEmptyString "${versionOption}" 'undefined version option'
     checkTrueFalseString "${remoteUnzip}"
-    if [[ "${#binarySubPaths[@]}" -lt '1' ]]
-    then
+    if [[ "${#binarySubPaths[@]}" -lt '1' ]]; then
         fatal '\nFATAL : undefined binary sub paths'
     fi
     header "INSTALLING ${appTitleName}"
@@ -1165,10 +1029,8 @@ function installPortableBinary()
     checkRequireRootUser
     umask '0022'
     initializeFolder "${installFolderPath}"
-    if [[ "${remoteUnzip}" = 'true' ]]
-    then
-        if [[ "$(getFileExtension "${downloadURL}")" = 'sh' ]]
-        then
+    if [[ "${remoteUnzip}" = 'true' ]]; then
+        if [[ "$(getFileExtension "${downloadURL}")" = 'sh' ]]; then
             curl -s -L "${downloadURL}" --retry 12 --retry-delay 5 | bash -e
         else
             unzipRemoteFile "${downloadURL}" "${installFolderPath}"
@@ -1177,15 +1039,14 @@ function installPortableBinary()
             '#!/bin/sh -e' \
             "${installFolderPath}" \
             "$(dirname "${binarySubPaths[0]}")" \
-        > "/etc/profile.d/$(basename "${installFolderPath}").sh"
+            >"/etc/profile.d/$(basename "${installFolderPath}").sh"
         chmod 644 "/etc/profile.d/$(basename "${installFolderPath}").sh"
     else
         downloadFile "${downloadURL}" "${installFolderPath}/${binarySubPaths[0]}" 'true'
     fi
     chown -R "$(whoami):$(whoami)" "${installFolderPath}"
     local binarySubPath=''
-    for binarySubPath in "${binarySubPaths[@]}"
-    do
+    for binarySubPath in "${binarySubPaths[@]}"; do
         symlinkListUsrBin "${installFolderPath}/${binarySubPath}"
     done
     displayVersion "$("/usr/bin/$(basename "${binarySubPaths[0]}")" "${versionOption}")"
@@ -1195,25 +1056,20 @@ function installPortableBinary()
 #################
 # MAC UTILITIES #
 #################
-function closeMacApplications()
-{
+function closeMacApplications() {
     local -r headerMessage="${1}"
     local -r applicationNames=("${@:2}")
     checkRequireMacSystem
-    if [[ "${#applicationNames[@]}" -gt '0' ]]
-    then
+    if [[ "${#applicationNames[@]}" -gt '0' ]]; then
         header "${headerMessage}"
     fi
     local applicationName=''
-    for applicationName in "${applicationNames[@]}"
-    do
+    for applicationName in "${applicationNames[@]}"; do
         applicationName="$(getFileName "${applicationName}")"
-        if [[ "${applicationName}" != 'Terminal' ]]
-        then
+        if [[ "${applicationName}" != 'Terminal' ]]; then
             local errorMessage=''
             errorMessage="$(osascript -e "tell application \"${applicationName}\" to quit" 2>&1 || true)"
-            if [[ "$(isEmptyString "${errorMessage}")" = 'true' || "$(grep -E -o '\(-128)$' <<< "${errorMessage}")" != '' ]]
-            then
+            if [[ "$(isEmptyString "${errorMessage}")" = 'true' || "$(grep -E -o '\(-128)$' <<<"${errorMessage}")" != '' ]]; then
                 info "closing '${applicationName}'"
             else
                 error "${errorMessage}"
@@ -1221,28 +1077,23 @@ function closeMacApplications()
         fi
     done
 }
-function getMacCurrentUserICloudDriveFolderPath()
-{
+function getMacCurrentUserICloudDriveFolderPath() {
     local -r iCloudFolderPath="$(getCurrentUserHomeFolder)/Library/Mobile Documents/com~apple~CloudDocs"
-    if [[ -d "${iCloudFolderPath}" ]]
-    then
+    if [[ -d "${iCloudFolderPath}" ]]; then
         echo "${iCloudFolderPath}"
     else
         echo
     fi
 }
-function openMacApplications()
-{
+function openMacApplications() {
     local -r headerMessage="${1}"
     local -r applicationNames=("${@:2}")
     checkRequireMacSystem
-    if [[ "${#applicationNames[@]}" -gt '0' ]]
-    then
+    if [[ "${#applicationNames[@]}" -gt '0' ]]; then
         header "${headerMessage}"
     fi
     local applicationName=''
-    for applicationName in "${applicationNames[@]}"
-    do
+    for applicationName in "${applicationNames[@]}"; do
         info "openning '${applicationName}'"
         osascript -e "tell application \"${applicationName}\" to activate"
     done
@@ -1250,46 +1101,36 @@ function openMacApplications()
 ####################
 # NUMBER UTILITIES #
 ####################
-function checkNaturalNumber()
-{
+function checkNaturalNumber() {
     local -r string="${1}"
     local -r errorMessage="${2}"
-    if [[ "$(isNaturalNumber "${string}")" = 'false' ]]
-    then
-        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]
-        then
+    if [[ "$(isNaturalNumber "${string}")" = 'false' ]]; then
+        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]; then
             fatal '\nFATAL : not natural number detected'
         fi
         fatal "\nFATAL : ${errorMessage}"
     fi
 }
-function checkPositiveInteger()
-{
+function checkPositiveInteger() {
     local -r string="${1}"
     local -r errorMessage="${2}"
-    if [[ "$(isPositiveInteger "${string}")" = 'false' ]]
-    then
-        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]
-        then
+    if [[ "$(isPositiveInteger "${string}")" = 'false' ]]; then
+        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]; then
             fatal '\nFATAL : not positive number detected'
         fi
         fatal "\nFATAL : ${errorMessage}"
     fi
 }
-function isNaturalNumber()
-{
+function isNaturalNumber() {
     local -r string="${1}"
-    if [[ "${string}" =~ ^[0-9]+$ ]]
-    then
+    if [[ "${string}" =~ ^[0-9]+$ ]]; then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
 }
-function isPositiveInteger()
-{
+function isPositiveInteger() {
     local -r string="${1}"
-    if [[ "${string}" =~ ^[1-9][0-9]*$ ]]
-    then
+    if [[ "${string}" =~ ^[1-9][0-9]*$ ]]; then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
@@ -1297,272 +1138,213 @@ function isPositiveInteger()
 ################
 # OS UTILITIES #
 ################
-function checkRequireLinuxSystem()
-{
-    if [[ "$(isAmazonLinuxDistributor)" = 'false' && "$(isCentOSDistributor)" = 'false' && "$(isRedHatDistributor)" = 'false' && "$(isUbuntuDistributor)" = 'false' ]]
-    then
+function checkRequireLinuxSystem() {
+    if [[ "$(isAmazonLinuxDistributor)" = 'false' && "$(isCentOSDistributor)" = 'false' && "$(isRedHatDistributor)" = 'false' && "$(isUbuntuDistributor)" = 'false' ]]; then
         fatal '\nFATAL : only support Amazon-Linux, CentOS, RedHat, or Ubuntu OS'
     fi
-    if [[ "$(is64BitSystem)" = 'false' ]]
-    then
+    if [[ "$(is64BitSystem)" = 'false' ]]; then
         fatal '\nFATAL : non x86_64 OS found'
     fi
 }
-function checkRequireMacSystem()
-{
-    if [[ "$(isMacOperatingSystem)" = 'false' ]]
-    then
+function checkRequireMacSystem() {
+    if [[ "$(isMacOperatingSystem)" = 'false' ]]; then
         fatal '\nFATAL : only support Mac OS'
     fi
-    if [[ "$(is64BitSystem)" = 'false' ]]
-    then
+    if [[ "$(is64BitSystem)" = 'false' ]]; then
         fatal '\nFATAL : non x86_64 OS found'
     fi
 }
-function getMachineDescription()
-{
+function getMachineDescription() {
     lsb_release -d -s
 }
-function getMachineRelease()
-{
+function getMachineRelease() {
     lsb_release -r -s
 }
-function is64BitSystem()
-{
+function is64BitSystem() {
     isMachineHardware 'x86_64'
 }
-function isAmazonLinuxDistributor()
-{
+function isAmazonLinuxDistributor() {
     isDistributor 'amzn'
 }
-function isCentOSDistributor()
-{
+function isCentOSDistributor() {
     isDistributor 'centos'
 }
-function isDistributor()
-{
+function isDistributor() {
     local -r distributor="${1}"
     local -r found="$(grep -F -i -o -s "${distributor}" '/proc/version')"
-    if [[ "$(isEmptyString "${found}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${found}")" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function isLinuxOperatingSystem()
-{
+function isLinuxOperatingSystem() {
     isOperatingSystem 'Linux'
 }
-function isMachineHardware()
-{
+function isMachineHardware() {
     local -r machineHardware="$(escapeGrepSearchPattern "${1}")"
     local -r found="$(uname -m | grep -E -i -o "^${machineHardware}$")"
-    if [[ "$(isEmptyString "${found}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${found}")" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function isMacOperatingSystem()
-{
+function isMacOperatingSystem() {
     isOperatingSystem 'Darwin'
 }
-function isOperatingSystem()
-{
+function isOperatingSystem() {
     local -r operatingSystem="$(escapeGrepSearchPattern "${1}")"
     local -r found="$(uname -s | grep -E -i -o "^${operatingSystem}$")"
-    if [[ "$(isEmptyString "${found}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${found}")" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function isRedHatDistributor()
-{
+function isRedHatDistributor() {
     isDistributor 'redhat'
 }
-function isUbuntuDistributor()
-{
+function isUbuntuDistributor() {
     isDistributor 'ubuntu'
 }
 #####################
 # PACKAGE UTILITIES #
 #####################
-function getLastAptGetUpdate()
-{
-    if [[ "$(isUbuntuDistributor)" = 'true' ]]
-    then
+function getLastAptGetUpdate() {
+    if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
         local -r aptDate="$(stat -c %Y '/var/cache/apt')"
         local -r nowDate="$(date +'%s')"
         echo $((nowDate - aptDate))
     fi
 }
-function installBuildEssential()
-{
-    if [[ "$(isUbuntuDistributor)" = 'true' ]]
-    then
+function installBuildEssential() {
+    if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
         installPackages 'build-essential'
-    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]
-    then
+    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]; then
         installPackages 'gcc-c++' 'kernel-devel' 'make'
     else
         fatal '\nFATAL : only support Amazon-Linux, CentOS, RedHat, or Ubuntu OS'
     fi
 }
-function installBZip2Command()
-{
+function installBZip2Command() {
     local -r commandPackage=('bzip2' 'bzip2')
     installCommands "${commandPackage[@]}"
 }
-function installCleanUp()
-{
+function installCleanUp() {
     header 'CLEANING UP INSTALLATION'
-    if [[ "$(isUbuntuDistributor)" = 'true' ]]
-    then
+    if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
         DEBIAN_FRONTEND='noninteractive' apt-get --fix-missing -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' autoremove
         DEBIAN_FRONTEND='noninteractive' apt-get --fix-missing -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' clean
         DEBIAN_FRONTEND='noninteractive' apt-get --fix-missing -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' autoclean
-    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]
-    then
+    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]; then
         yum clean all
     else
         fatal '\nFATAL : only support Amazon-Linux, CentOS, RedHat, or Ubuntu OS'
     fi
 }
-function installCommands()
-{
+function installCommands() {
     local -r commandPackageData=("${@}")
-    if [[ "$(isUbuntuDistributor)" = 'true' ]]
-    then
+    if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
         runAptGetUpdate ''
     fi
     local i=0
-    for ((i = 0; i < ${#commandPackageData[@]}; i = i + 2))
-    do
+    for ((i = 0; i < ${#commandPackageData[@]}; i = i + 2)); do
         local command="${commandPackageData[${i}]}"
         local package="${commandPackageData[${i} + 1]}"
         checkNonEmptyString "${command}" 'undefined command'
         checkNonEmptyString "${package}" 'undefined package'
-        if [[ "$(existCommand "${command}")" = 'false' ]]
-        then
+        if [[ "$(existCommand "${command}")" = 'false' ]]; then
             installPackages "${package}"
         fi
     done
 }
-function installCURLCommand()
-{
+function installCURLCommand() {
     local -r commandPackage=('curl' 'curl')
     installCommands "${commandPackage[@]}"
 }
-function installPackage()
-{
+function installPackage() {
     local -r aptPackage="${1}"
     local -r rpmPackage="${2}"
-    if [[ "$(isUbuntuDistributor)" = 'true' ]]
-    then
-        if [[ "$(isEmptyString "${aptPackage}")" = 'false' ]]
-        then
-            if [[ "$(isAptGetPackageInstall "${aptPackage}")" = 'true' ]]
-            then
+    if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
+        if [[ "$(isEmptyString "${aptPackage}")" = 'false' ]]; then
+            if [[ "$(isAptGetPackageInstall "${aptPackage}")" = 'true' ]]; then
                 debug "\nApt-Get Package '${aptPackage}' has already been installed"
             else
                 echo -e "\033[1;35m\nInstalling Apt-Get Package '${aptPackage}'\033[0m"
                 DEBIAN_FRONTEND='noninteractive' apt-get install "${aptPackage}" --fix-missing -y ||
-                (DEBIAN_FRONTEND='noninteractive' apt-get install --fix-missing --yes -f -y && DEBIAN_FRONTEND='noninteractive' apt-get install "${aptPackage}" --fix-missing -y)
+                    (DEBIAN_FRONTEND='noninteractive' apt-get install --fix-missing --yes -f -y && DEBIAN_FRONTEND='noninteractive' apt-get install "${aptPackage}" --fix-missing -y)
             fi
         fi
-    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]
-    then
-        if [[ "$(isEmptyString "${rpmPackage}")" = 'false' ]]
-        then
+    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]; then
+        if [[ "$(isEmptyString "${rpmPackage}")" = 'false' ]]; then
             yum install -y "${rpmPackage}"
         fi
     else
         fatal '\nFATAL : only support Amazon-Linux, CentOS, RedHat, or Ubuntu OS'
     fi
 }
-function installPackages()
-{
+function installPackages() {
     local -r packages=("${@}")
-    if [[ "$(isUbuntuDistributor)" = 'true' ]]
-    then
+    if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
         runAptGetUpdate ''
     fi
     local package=''
-    for package in "${packages[@]}"
-    do
-        if [[ "$(isUbuntuDistributor)" = 'true' ]]
-        then
+    for package in "${packages[@]}"; do
+        if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
             installPackage "${package}"
-        elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]
-        then
+        elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]; then
             installPackage '' "${package}"
         else
             fatal '\nFATAL : only support Amazon-Linux, CentOS, RedHat, or Ubuntu OS'
         fi
     done
 }
-function installPIPCommand()
-{
+function installPIPCommand() {
     local -r commandPackage=('pip' 'python-pip')
     installCommands "${commandPackage[@]}"
 }
-function installPIPPackage()
-{
+function installPIPPackage() {
     local -r package="${1}"
-    if [[ "$(isPIPPackageInstall "${package}")" = 'true' ]]
-    then
+    if [[ "$(isPIPPackageInstall "${package}")" = 'true' ]]; then
         debug "PIP Package '${package}' found"
     else
         echo -e "\033[1;35m\nInstalling PIP package '${package}'\033[0m"
         pip install "${package}"
     fi
 }
-function installUnzipCommand()
-{
+function installUnzipCommand() {
     local -r commandPackage=('unzip' 'unzip')
     installCommands "${commandPackage[@]}"
 }
-function isAptGetPackageInstall()
-{
+function isAptGetPackageInstall() {
     local -r package="$(escapeGrepSearchPattern "${1}")"
     local -r found="$(dpkg --get-selections | grep -E -o "^${package}(:amd64)*\s+install$")"
-    if [[ "$(isEmptyString "${found}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${found}")" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function isPIPPackageInstall()
-{
+function isPIPPackageInstall() {
     local -r package="$(escapeGrepSearchPattern "${1}")"
     # Install PIP
-    installPIPCommand > '/dev/null'
+    installPIPCommand >'/dev/null'
     # Check Command
-    if [[ "$(existCommand 'pip')" = 'false' ]]
-    then
+    if [[ "$(existCommand 'pip')" = 'false' ]]; then
         fatal 'FATAL : command python-pip not found'
     fi
     local -r found="$(pip list | grep -E -o "^${package}\s+\(.*\)$")"
-    if [[ "$(isEmptyString "${found}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${found}")" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function runAptGetUpdate()
-{
+function runAptGetUpdate() {
     local updateInterval="${1}"
-    if [[ "$(isUbuntuDistributor)" = 'true' ]]
-    then
+    if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
         local -r lastAptGetUpdate="$(getLastAptGetUpdate)"
-        if [[ "$(isEmptyString "${updateInterval}")" = 'true' ]]
-        then
+        if [[ "$(isEmptyString "${updateInterval}")" = 'true' ]]; then
             # Default To 24 hours
             updateInterval="$((24 * 60 * 60))"
         fi
-        if [[ "${lastAptGetUpdate}" -gt "${updateInterval}" ]]
-        then
+        if [[ "${lastAptGetUpdate}" -gt "${updateInterval}" ]]; then
             info 'apt-get update'
             apt-get update -m
         else
@@ -1571,11 +1353,9 @@ function runAptGetUpdate()
         fi
     fi
 }
-function runUpgrade()
-{
+function runUpgrade() {
     header 'UPGRADING SYSTEM'
-    if [[ "$(isUbuntuDistributor)" = 'true' ]]
-    then
+    if [[ "$(isUbuntuDistributor)" = 'true' ]]; then
         runAptGetUpdate ''
         info '\napt-get upgrade'
         DEBIAN_FRONTEND='noninteractive' apt-get --fix-missing -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' upgrade
@@ -1587,17 +1367,14 @@ function runUpgrade()
         DEBIAN_FRONTEND='noninteractive' apt-get --fix-missing -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' clean
         info '\napt-get autoclean'
         DEBIAN_FRONTEND='noninteractive' apt-get --fix-missing -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' autoclean
-    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]
-    then
+    elif [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isCentOSDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' ]]; then
         yum -y --security update
         yum -y update --nogpgcheck --skip-broken
     fi
 }
-function upgradePIPPackage()
-{
+function upgradePIPPackage() {
     local -r package="${1}"
-    if [[ "$(isPIPPackageInstall "${package}")" = 'true' ]]
-    then
+    if [[ "$(isPIPPackageInstall "${package}")" = 'true' ]]; then
         echo -e "\033[1;35mUpgrading PIP package '${package}'\033[0m"
         pip install --upgrade "${package}"
     else
@@ -1607,12 +1384,10 @@ function upgradePIPPackage()
 #####################
 # SERVICE UTILITIES #
 #####################
-function disableService()
-{
+function disableService() {
     local -r serviceName="${1}"
     checkNonEmptyString "${serviceName}" 'undefined service name'
-    if [[ "$(existCommand 'systemctl')" = 'true' ]]
-    then
+    if [[ "$(existCommand 'systemctl')" = 'true' ]]; then
         header "DISABLE SYSTEMD ${serviceName}"
         systemctl daemon-reload
         systemctl disable "${serviceName}"
@@ -1624,12 +1399,10 @@ function disableService()
     fi
     statusService "${serviceName}"
 }
-function enableService()
-{
+function enableService() {
     local -r serviceName="${1}"
     checkNonEmptyString "${serviceName}" 'undefined service name'
-    if [[ "$(existCommand 'systemctl')" = 'true' ]]
-    then
+    if [[ "$(existCommand 'systemctl')" = 'true' ]]; then
         header "ENABLE SYSTEMD ${serviceName}"
         systemctl daemon-reload
         systemctl enable "${serviceName}" || true
@@ -1639,19 +1412,16 @@ function enableService()
     fi
     statusService "${serviceName}"
 }
-function restartService()
-{
+function restartService() {
     local -r serviceName="${1}"
     checkNonEmptyString "${serviceName}" 'undefined service name'
     stopService "${serviceName}"
     startService "${serviceName}"
 }
-function startService()
-{
+function startService() {
     local -r serviceName="${1}"
     checkNonEmptyString "${serviceName}" 'undefined service name'
-    if [[ "$(existCommand 'systemctl')" = 'true' ]]
-    then
+    if [[ "$(existCommand 'systemctl')" = 'true' ]]; then
         header "STARTING SYSTEMD ${serviceName}"
         systemctl daemon-reload
         systemctl enable "${serviceName}" || true
@@ -1663,12 +1433,10 @@ function startService()
     fi
     statusService "${serviceName}"
 }
-function statusService()
-{
+function statusService() {
     local -r serviceName="${1}"
     checkNonEmptyString "${serviceName}" 'undefined service name'
-    if [[ "$(existCommand 'systemctl')" = 'true' ]]
-    then
+    if [[ "$(existCommand 'systemctl')" = 'true' ]]; then
         header "STATUS SYSTEMD ${serviceName}"
         systemctl status "${serviceName}" --full --no-pager || true
     else
@@ -1676,12 +1444,10 @@ function statusService()
         service "${serviceName}" status || true
     fi
 }
-function stopService()
-{
+function stopService() {
     local -r serviceName="${1}"
     checkNonEmptyString "${serviceName}" 'undefined service name'
-    if [[ "$(existCommand 'systemctl')" = 'true' ]]
-    then
+    if [[ "$(existCommand 'systemctl')" = 'true' ]]; then
         header "STOPPING SYSTEMD ${serviceName}"
         systemctl daemon-reload
         systemctl stop "${serviceName}" || true
@@ -1694,291 +1460,235 @@ function stopService()
 ####################
 # STRING UTILITIES #
 ####################
-function checkNonEmptyString()
-{
+function checkNonEmptyString() {
     local -r string="${1}"
     local -r errorMessage="${2}"
-    if [[ "$(isEmptyString "${string}")" = 'true' ]]
-    then
-        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]
-        then
+    if [[ "$(isEmptyString "${string}")" = 'true' ]]; then
+        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]; then
             fatal '\nFATAL : empty value detected'
         fi
         fatal "\nFATAL : ${errorMessage}"
     fi
 }
-function checkTrueFalseString()
-{
+function checkTrueFalseString() {
     local -r string="${1}"
     local -r errorMessage="${2}"
-    if [[ "${string}" != 'true' && "${string}" != 'false' ]]
-    then
-        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]
-        then
+    if [[ "${string}" != 'true' && "${string}" != 'false' ]]; then
+        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]; then
             fatal "\nFATAL : '${string}' is not 'true' or 'false'"
         fi
         fatal "\nFATAL : ${errorMessage}"
     fi
 }
-function debug()
-{
+function debug() {
     local -r message="${1}"
-    if [[ "$(isEmptyString "${message}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${message}")" = 'false' ]]; then
         echo -e "\033[1;34m${message}\033[0m" 2>&1
     fi
 }
-function deleteSpaces()
-{
+function deleteSpaces() {
     local -r content="${1}"
     replaceString "${content}" ' ' ''
 }
-function displayVersion()
-{
+function displayVersion() {
     local -r message="${1}"
     local -r applicationName="${2}"
-    if [[ "$(isEmptyString "${applicationName}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${applicationName}")" = 'true' ]]; then
         header 'DISPLAYING VERSION'
     else
         header "DISPLAYING ${applicationName} VERSION"
     fi
     info "${message}"
 }
-function encodeURL()
-{
+function encodeURL() {
     local -r url="${1}"
     local i=0
-    for ((i = 0; i < ${#url}; i++))
-    do
+    for ((i = 0; i < ${#url}; i++)); do
         local walker=''
         walker="${url:i:1}"
         case "${walker}" in
-            [a-zA-Z0-9.~_-])
-                printf '%s' "${walker}"
-                ;;
-            ' ')
-                printf +
-                ;;
-            *)
-                printf '%%%X' "'${walker}"
-                ;;
+        [a-zA-Z0-9.~_-])
+            printf '%s' "${walker}"
+            ;;
+        ' ')
+            printf +
+            ;;
+        *)
+            printf '%%%X' "'${walker}"
+            ;;
         esac
     done
 }
-function error()
-{
+function error() {
     local -r message="${1}"
-    if [[ "$(isEmptyString "${message}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${message}")" = 'false' ]]; then
         echo -e "\033[1;31m${message}\033[0m" 1>&2
     fi
 }
-function escapeGrepSearchPattern()
-{
+function escapeGrepSearchPattern() {
     local -r searchPattern="${1}"
-    sed 's/[]\.|$(){}?+*^]/\\&/g' <<< "${searchPattern}"
+    sed 's/[]\.|$(){}?+*^]/\\&/g' <<<"${searchPattern}"
 }
-function escapeSearchPattern()
-{
+function escapeSearchPattern() {
     local -r searchPattern="${1}"
-    sed -e "s@\@@\\\\\\@@g" -e "s@\[@\\\\[@g" -e "s@\*@\\\\*@g" -e "s@\%@\\\\%@g" <<< "${searchPattern}"
+    sed -e "s@\@@\\\\\\@@g" -e "s@\[@\\\\[@g" -e "s@\*@\\\\*@g" -e "s@\%@\\\\%@g" <<<"${searchPattern}"
 }
-function fatal()
-{
+function fatal() {
     local -r message="${1}"
     error "${message}"
     exit 1
 }
-function formatPath()
-{
+function formatPath() {
     local path="${1}"
-    while [[ "$(grep -F '//' <<< "${path}")" != '' ]]
-    do
-        path="$(sed -e 's/\/\/*/\//g' <<< "${path}")"
+    while [[ "$(grep -F '//' <<<"${path}")" != '' ]]; do
+        path="$(sed -e 's/\/\/*/\//g' <<<"${path}")"
     done
-    sed -e 's/\/$//g' <<< "${path}"
+    sed -e 's/\/$//g' <<<"${path}"
 }
-function header()
-{
+function header() {
     local -r title="${1}"
-    if [[ "$(isEmptyString "${title}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${title}")" = 'false' ]]; then
         echo -e "\n\033[1;33m>>>>>>>>>> \033[1;4;35m${title}\033[0m \033[1;33m<<<<<<<<<<\033[0m\n"
     fi
 }
-function indentString()
-{
+function indentString() {
     local -r indentString="$(escapeSearchPattern "${1}")"
     local -r string="$(escapeSearchPattern "${2}")"
-    sed "s@^@${indentString}@g" <<< "${string}"
+    sed "s@^@${indentString}@g" <<<"${string}"
 }
-function info()
-{
+function info() {
     local -r message="${1}"
-    if [[ "$(isEmptyString "${message}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${message}")" = 'false' ]]; then
         echo -e "\033[1;36m${message}\033[0m" 2>&1
     fi
 }
-function invertTrueFalseString()
-{
+function invertTrueFalseString() {
     local -r string="${1}"
     checkTrueFalseString "${string}"
-    if [[ "${string}" = 'true' ]]
-    then
+    if [[ "${string}" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function isEmptyString()
-{
+function isEmptyString() {
     local -r string="${1}"
-    if [[ "$(trimString "${string}")" = '' ]]
-    then
+    if [[ "$(trimString "${string}")" = '' ]]; then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
 }
-function postUpMessage()
-{
+function postUpMessage() {
     echo -e "\n\033[1;32m¯\_(ツ)_/¯\033[0m"
 }
-function printTable()
-{
+function printTable() {
     local -r delimiter="${1}"
     local -r tableData="$(removeEmptyLines "${2}")"
     local -r colorHeader="${3}"
     local -r displayTotalCount="${4}"
-    if [[ "${delimiter}" != '' && "$(isEmptyString "${tableData}")" = 'false' ]]
-    then
-        local -r numberOfLines="$(trimString "$(wc -l <<< "${tableData}")")"
-        if [[ "${numberOfLines}" -gt '0' ]]
-        then
+    if [[ "${delimiter}" != '' && "$(isEmptyString "${tableData}")" = 'false' ]]; then
+        local -r numberOfLines="$(trimString "$(wc -l <<<"${tableData}")")"
+        if [[ "${numberOfLines}" -gt '0' ]]; then
             local table=''
             local i=1
-            for ((i = 1; i <= "${numberOfLines}"; i = i + 1))
-            do
+            for ((i = 1; i <= "${numberOfLines}"; i = i + 1)); do
                 local line=''
-                line="$(sed "${i}q;d" <<< "${tableData}")"
+                line="$(sed "${i}q;d" <<<"${tableData}")"
                 local numberOfColumns=0
-                numberOfColumns="$(awk -F "${delimiter}" '{print NF}' <<< "${line}")"
+                numberOfColumns="$(awk -F "${delimiter}" '{print NF}' <<<"${line}")"
                 # Add Line Delimiter
-                if [[ "${i}" -eq '1' ]]
-                then
+                if [[ "${i}" -eq '1' ]]; then
                     table="${table}$(printf '%s#+' "$(repeatString '#+' "${numberOfColumns}")")"
                 fi
                 # Add Header Or Body
                 table="${table}\n"
                 local j=1
-                for ((j = 1; j <= "${numberOfColumns}"; j = j + 1))
-                do
-                    table="${table}$(printf '#|  %s' "$(cut -d "${delimiter}" -f "${j}" <<< "${line}")")"
+                for ((j = 1; j <= "${numberOfColumns}"; j = j + 1)); do
+                    table="${table}$(printf '#|  %s' "$(cut -d "${delimiter}" -f "${j}" <<<"${line}")")"
                 done
                 table="${table}#|\n"
                 # Add Line Delimiter
-                if [[ "${i}" -eq '1' ]] || [[ "${numberOfLines}" -gt '1' && "${i}" -eq "${numberOfLines}" ]]
-                then
+                if [[ "${i}" -eq '1' ]] || [[ "${numberOfLines}" -gt '1' && "${i}" -eq "${numberOfLines}" ]]; then
                     table="${table}$(printf '%s#+' "$(repeatString '#+' "${numberOfColumns}")")"
                 fi
             done
-            if [[ "$(isEmptyString "${table}")" = 'false' ]]
-            then
+            if [[ "$(isEmptyString "${table}")" = 'false' ]]; then
                 local output=''
                 output="$(echo -e "${table}" | column -s '#' -t | awk '/^\+/{gsub(" ", "-", $0)}1')"
-                if [[ "${colorHeader}" = 'true' ]]
-                then
-                    echo -e "\033[1;32m$(head -n 3 <<< "${output}")\033[0m"
-                    tail -n +4 <<< "${output}"
+                if [[ "${colorHeader}" = 'true' ]]; then
+                    echo -e "\033[1;32m$(head -n 3 <<<"${output}")\033[0m"
+                    tail -n +4 <<<"${output}"
                 else
                     echo "${output}"
                 fi
             fi
         fi
-        if [[ "${displayTotalCount}" = 'true' && "${numberOfLines}" -ge '0' ]]
-        then
+        if [[ "${displayTotalCount}" = 'true' && "${numberOfLines}" -ge '0' ]]; then
             echo -e "\n\033[1;36mTOTAL ROWS : $((numberOfLines - 1))\033[0m"
         fi
     fi
 }
-function removeEmptyLines()
-{
+function removeEmptyLines() {
     local -r content="${1}"
     echo -e "${content}" | sed '/^\s*$/d'
 }
-function repeatString()
-{
+function repeatString() {
     local -r string="${1}"
     local -r numberToRepeat="${2}"
-    if [[ "${string}" != '' && "$(isPositiveInteger "${numberToRepeat}")" = 'true' ]]
-    then
+    if [[ "${string}" != '' && "$(isPositiveInteger "${numberToRepeat}")" = 'true' ]]; then
         local -r result="$(printf "%${numberToRepeat}s")"
         echo -e "${result// /${string}}"
     fi
 }
-function replaceString()
-{
+function replaceString() {
     local -r content="${1}"
     local -r oldValue="$(escapeSearchPattern "${2}")"
     local -r newValue="$(escapeSearchPattern "${3}")"
-    sed "s@${oldValue}@${newValue}@g" <<< "${content}"
+    sed "s@${oldValue}@${newValue}@g" <<<"${content}"
 }
-function stringToNumber()
-{
+function stringToNumber() {
     local -r string="${1}"
     checkNonEmptyString "${string}" 'undefined string'
-    if [[ "$(existCommand 'md5')" = 'true' ]]
-    then
-        md5 <<< "${string}" | tr -cd '0-9'
-    elif [[ "$(existCommand 'md5sum')" = 'true' ]]
-    then
-        md5sum <<< "${string}" | tr -cd '0-9'
+    if [[ "$(existCommand 'md5')" = 'true' ]]; then
+        md5 <<<"${string}" | tr -cd '0-9'
+    elif [[ "$(existCommand 'md5sum')" = 'true' ]]; then
+        md5sum <<<"${string}" | tr -cd '0-9'
     else
         fatal '\nFATAL : md5 or md5sum command not found'
     fi
 }
-function stringToSearchPattern()
-{
+function stringToSearchPattern() {
     local -r string="$(trimString "${1}")"
-    if [[ "$(isEmptyString "${string}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${string}")" = 'true' ]]; then
         echo "${string}"
     else
-        echo "^\s*$(sed -e 's/\s\+/\\s+/g' <<< "$(escapeSearchPattern "${string}")")\s*$"
+        echo "^\s*$(sed -e 's/\s\+/\\s+/g' <<<"$(escapeSearchPattern "${string}")")\s*$"
     fi
 }
-function trimString()
-{
+function trimString() {
     local -r string="${1}"
-    sed 's,^[[:blank:]]*,,' <<< "${string}" | sed 's,[[:blank:]]*$,,'
+    sed 's,^[[:blank:]]*,,' <<<"${string}" | sed 's,[[:blank:]]*$,,'
 }
-function warn()
-{
+function warn() {
     local -r message="${1}"
-    if [[ "$(isEmptyString "${message}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${message}")" = 'false' ]]; then
         echo -e "\033[1;33m${message}\033[0m" 1>&2
     fi
 }
 ####################
 # SYSTEM UTILITIES #
 ####################
-function addSwapSpace()
-{
+function addSwapSpace() {
     local swapSize="${1}"
     local swapFile="${2}"
     header 'ADDING SWAP SPACE'
     # Set Default Values
-    if [[ "$(isEmptyString "${swapSize}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${swapSize}")" = 'true' ]]; then
         swapSize='1024000'
     fi
-    if [[ "$(isEmptyString "${swapFile}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${swapFile}")" = 'true' ]]; then
         swapFile='/mnt/swapfile'
     fi
-    if [[ -f "${swapFile}" ]]
-    then
+    if [[ -f "${swapFile}" ]]; then
         swapoff "${swapFile}"
     fi
     rm -f "${swapFile}"
@@ -1994,107 +1704,87 @@ function addSwapSpace()
     # Display Swap Status
     free -m
 }
-function checkExistCommand()
-{
+function checkExistCommand() {
     local -r command="${1}"
     local -r errorMessage="${2}"
-    if [[ "$(existCommand "${command}")" = 'false' ]]
-    then
-        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]
-        then
+    if [[ "$(existCommand "${command}")" = 'false' ]]; then
+        if [[ "$(isEmptyString "${errorMessage}")" = 'true' ]]; then
             fatal "\nFATAL : command '${command}' not found"
         fi
         fatal "\nFATAL : ${errorMessage}"
     fi
 }
-function checkRequirePorts()
-{
+function checkRequirePorts() {
     local -r ports=("${@}")
     installPackages 'lsof'
     local -r headerRegex='^COMMAND\s\+PID\s\+USER\s\+FD\s\+TYPE\s\+DEVICE\s\+SIZE\/OFF\s\+NODE\s\+NAME$'
     local -r status="$(lsof -i -n -P | grep "\( (LISTEN)$\)\|\(${headerRegex}\)")"
     local open=''
     local port=''
-    for port in "${ports[@]}"
-    do
+    for port in "${ports[@]}"; do
         local found=''
-        found="$(grep -i ":${port} (LISTEN)$" <<< "${status}" || echo)"
-        if [[ "$(isEmptyString "${found}")" = 'false' ]]
-        then
+        found="$(grep -i ":${port} (LISTEN)$" <<<"${status}" || echo)"
+        if [[ "$(isEmptyString "${found}")" = 'false' ]]; then
             open="${open}\n${found}"
         fi
     done
-    if [[ "$(isEmptyString "${open}")" = 'false' ]]
-    then
-        echo -e    "\033[1;31mFollowing ports are still opened. Make sure you uninstall or stop them before a new installation!\033[0m"
-        echo -e -n "\033[1;34m\n$(grep "${headerRegex}" <<< "${status}")\033[0m"
-        echo -e    "\033[1;36m${open}\033[0m\n"
+    if [[ "$(isEmptyString "${open}")" = 'false' ]]; then
+        echo -e "\033[1;31mFollowing ports are still opened. Make sure you uninstall or stop them before a new installation!\033[0m"
+        echo -e -n "\033[1;34m\n$(grep "${headerRegex}" <<<"${status}")\033[0m"
+        echo -e "\033[1;36m${open}\033[0m\n"
         exit 1
     fi
 }
-function displayOpenPorts()
-{
+function displayOpenPorts() {
     local -r sleepTimeInSecond="${1}"
     installPackages 'lsof'
     header 'DISPLAYING OPEN PORTS'
-    if [[ "$(isEmptyString "${sleepTimeInSecond}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${sleepTimeInSecond}")" = 'false' ]]; then
         sleep "${sleepTimeInSecond}"
     fi
     lsof -i -n -P | grep -i ' (LISTEN)$' | sort -f
 }
-function existCommand()
-{
+function existCommand() {
     local -r command="${1}"
-    if [[ "$(which "${command}" 2> '/dev/null')" = '' ]]
-    then
+    if [[ "$(which "${command}" 2>'/dev/null')" = '' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function existDisk()
-{
+function existDisk() {
     local -r disk="${1}"
-    local -r foundDisk="$(fdisk -l "${disk}" 2> '/dev/null' | grep -E -i -o "^Disk\s+$(escapeGrepSearchPattern "${disk}"): ")"
-    if [[ "$(isEmptyString "${disk}")" = 'false' && "$(isEmptyString "${foundDisk}")" = 'false' ]]
-    then
+    local -r foundDisk="$(fdisk -l "${disk}" 2>'/dev/null' | grep -E -i -o "^Disk\s+$(escapeGrepSearchPattern "${disk}"): ")"
+    if [[ "$(isEmptyString "${disk}")" = 'false' && "$(isEmptyString "${foundDisk}")" = 'false' ]]; then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
 }
-function existDiskMount()
-{
+function existDiskMount() {
     local -r disk="$(escapeGrepSearchPattern "${1}")"
     local -r mountOn="$(escapeGrepSearchPattern "${2}")"
     local -r foundMount="$(df | grep -E "^${disk}\s+.*\s+${mountOn}$")"
-    if [[ "$(isEmptyString "${foundMount}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${foundMount}")" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function existModule()
-{
+function existModule() {
     local -r module="${1}"
     checkNonEmptyString "${module}" 'undefined module'
-    if [[ "$(lsmod | awk '{ print $1 }' | grep -F -o "${module}")" = '' ]]
-    then
+    if [[ "$(lsmod | awk '{ print $1 }' | grep -F -o "${module}")" = '' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function existMount()
-{
+function existMount() {
     local -r mountOn="$(escapeGrepSearchPattern "${1}")"
     local -r foundMount="$(df | grep -E ".*\s+${mountOn}$")"
-    if [[ "$(isEmptyString "${foundMount}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${foundMount}")" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function flushFirewall()
-{
+function flushFirewall() {
     header 'FLUSHING FIREWALL'
     iptables -P INPUT ACCEPT
     iptables -P FORWARD ACCEPT
@@ -2106,58 +1796,46 @@ function flushFirewall()
     iptables --list
     saveFirewall
 }
-function isPortOpen()
-{
+function isPortOpen() {
     local -r port="$(escapeGrepSearchPattern "${1}")"
     checkNonEmptyString "${port}" 'undefined port'
-    if [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' || "$(isUbuntuDistributor)" = 'true' ]]
-    then
+    if [[ "$(isAmazonLinuxDistributor)" = 'true' || "$(isRedHatDistributor)" = 'true' || "$(isUbuntuDistributor)" = 'true' ]]; then
         local -r process="$(netstat -l -n -t -u | grep -E ":${port}\s+" | head -1)"
-    elif [[ "$(isCentOSDistributor)" = 'true' || "$(isMacOperatingSystem)" = 'true' ]]
-    then
-        if [[ "$(isCentOSDistributor)" = 'true' ]]
-        then
+    elif [[ "$(isCentOSDistributor)" = 'true' || "$(isMacOperatingSystem)" = 'true' ]]; then
+        if [[ "$(isCentOSDistributor)" = 'true' ]]; then
             installPackages 'lsof'
         fi
         local -r process="$(lsof -i -n -P | grep -E -i ":${port}\s+\(LISTEN\)$" | head -1)"
     else
         fatal '\nFATAL : only support Amazon-Linux, CentOS, Mac, RedHat, or Ubuntu OS'
     fi
-    if [[ "$(isEmptyString "${process}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${process}")" = 'true' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function redirectJDKTMPDir()
-{
+function redirectJDKTMPDir() {
     local -r option="_JAVA_OPTIONS='-Djava.io.tmpdir=/var/tmp'"
     appendToFileIfNotFound '/etc/environment' "${option}" "${option}" 'false' 'false' 'true'
     appendToFileIfNotFound '/etc/profile' "${option}" "${option}" 'false' 'false' 'true'
 }
-function remountTMP()
-{
+function remountTMP() {
     header 'RE-MOUNTING TMP'
-    if [[ "$(existMount '/tmp')" = 'true' ]]
-    then
+    if [[ "$(existMount '/tmp')" = 'true' ]]; then
         mount -o 'remount,rw,exec,nosuid' -v '/tmp'
     else
         warn 'WARN : mount /tmp not found'
     fi
 }
-function saveFirewall()
-{
+function saveFirewall() {
     header 'SAVING FIREWALL'
     local ruleFile=''
-    for ruleFile in '/etc/iptables/rules.v4' '/etc/iptables/rules.v6' '/etc/sysconfig/iptables' '/etc/sysconfig/ip6tables'
-    do
-        if [[ -f "${ruleFile}" ]]
-        then
-            if [[ "$(grep -F '6' <<< "${ruleFile}")" = '' ]]
-            then
-                iptables-save > "${ruleFile}"
+    for ruleFile in '/etc/iptables/rules.v4' '/etc/iptables/rules.v6' '/etc/sysconfig/iptables' '/etc/sysconfig/ip6tables'; do
+        if [[ -f "${ruleFile}" ]]; then
+            if [[ "$(grep -F '6' <<<"${ruleFile}")" = '' ]]; then
+                iptables-save >"${ruleFile}"
             else
-                ip6tables-save > "${ruleFile}"
+                ip6tables-save >"${ruleFile}"
             fi
             info "${ruleFile}"
             cat "${ruleFile}"
@@ -2168,8 +1846,7 @@ function saveFirewall()
 ############################
 # USER AND GROUP UTILITIES #
 ############################
-function addUser()
-{
+function addUser() {
     local -r userLogin="${1}"
     local -r groupName="${2}"
     local -r createHome="${3}"
@@ -2178,14 +1855,12 @@ function addUser()
     checkNonEmptyString "${userLogin}" 'undefined user login'
     checkNonEmptyString "${groupName}" 'undefined group name'
     # Options
-    if [[ "${createHome}" = 'true' ]]
-    then
+    if [[ "${createHome}" = 'true' ]]; then
         local -r createHomeOption=('-m')
     else
         local -r createHomeOption=('-M')
     fi
-    if [[ "${allowLogin}" = 'true' ]]
-    then
+    if [[ "${allowLogin}" = 'true' ]]; then
         local -r allowLoginOption=('-s' '/bin/bash')
     else
         local -r allowLoginOption=('-s' '/bin/false')
@@ -2193,88 +1868,70 @@ function addUser()
     # Add Group
     groupadd -f -r "${groupName}"
     # Add User
-    if [[ "$(existUserLogin "${userLogin}")" = 'true' ]]
-    then
-        if [[ "$(isUserLoginInGroupName "${userLogin}" "${groupName}")" = 'false' ]]
-        then
+    if [[ "$(existUserLogin "${userLogin}")" = 'true' ]]; then
+        if [[ "$(isUserLoginInGroupName "${userLogin}" "${groupName}")" = 'false' ]]; then
             usermod -a -G "${groupName}" "${userLogin}"
         fi
         # Not Exist Home
-        if [[ "${createHome}" = 'true' ]]
-        then
+        if [[ "${createHome}" = 'true' ]]; then
             local -r userHome="$(getUserHomeFolder "${userLogin}")"
-            if [[ "$(isEmptyString "${userHome}")" = 'true' || ! -d "${userHome}" ]]
-            then
+            if [[ "$(isEmptyString "${userHome}")" = 'true' || ! -d "${userHome}" ]]; then
                 mkdir -m 700 -p "/home/${userLogin}"
                 chown -R "${userLogin}:${groupName}" "/home/${userLogin}"
             fi
         fi
     else
-        if [[ "${systemAccount}" = 'true' ]]
-        then
+        if [[ "${systemAccount}" = 'true' ]]; then
             useradd "${createHomeOption[@]}" -r "${allowLoginOption[@]}" -g "${groupName}" "${userLogin}"
         else
             useradd "${createHomeOption[@]}" "${allowLoginOption[@]}" -g "${groupName}" "${userLogin}"
         fi
     fi
 }
-function addUserAuthorizedKey()
-{
+function addUserAuthorizedKey() {
     local -r userLogin="${1}"
     local -r groupName="${2}"
     local -r sshRSA="${3}"
     configUserSSH "${userLogin}" "${groupName}" "${sshRSA}" 'authorized_keys'
 }
-function addUserSSHKnownHost()
-{
+function addUserSSHKnownHost() {
     local -r userLogin="${1}"
     local -r groupName="${2}"
     local -r sshRSA="${3}"
     configUserSSH "${userLogin}" "${groupName}" "${sshRSA}" 'known_hosts'
 }
-function addUserToSudoWithoutPassword()
-{
+function addUserToSudoWithoutPassword() {
     local -r userLogin="${1}"
-    echo "${userLogin} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${userLogin}"
+    echo "${userLogin} ALL=(ALL) NOPASSWD:ALL" >"/etc/sudoers.d/${userLogin}"
     chmod 440 "/etc/sudoers.d/${userLogin}"
 }
-function checkExistGroupName()
-{
+function checkExistGroupName() {
     local -r groupName="${1}"
-    if [[ "$(existGroupName "${groupName}")" = 'false' ]]
-    then
+    if [[ "$(existGroupName "${groupName}")" = 'false' ]]; then
         fatal "\nFATAL : group name '${groupName}' not found"
     fi
 }
-function checkExistUserLogin()
-{
+function checkExistUserLogin() {
     local -r userLogin="${1}"
-    if [[ "$(existUserLogin "${userLogin}")" = 'false' ]]
-    then
+    if [[ "$(existUserLogin "${userLogin}")" = 'false' ]]; then
         fatal "\nFATAL : user login '${userLogin}' not found"
     fi
 }
-function checkRequireNonRootUser()
-{
-    if [[ "$(whoami)" = 'root' ]]
-    then
+function checkRequireNonRootUser() {
+    if [[ "$(whoami)" = 'root' ]]; then
         fatal '\nFATAL : non root login required'
     fi
 }
-function checkRequireRootUser()
-{
+function checkRequireRootUser() {
     checkRequireUserLogin 'root'
 }
-function checkRequireUserLogin()
-{
+function checkRequireUserLogin() {
     local -r userLogin="${1}"
-    if [[ "$(whoami)" != "${userLogin}" ]]
-    then
+    if [[ "$(whoami)" != "${userLogin}" ]]; then
         fatal "\nFATAL : user login '${userLogin}' required"
     fi
 }
-function configUserGIT()
-{
+function configUserGIT() {
     local -r userLogin="${1}"
     local -r gitUserName="${2}"
     local -r gitUserEmail="${3}"
@@ -2288,8 +1945,7 @@ function configUserGIT()
     su -l "${userLogin}" -c "git config --global user.name '${gitUserName}'"
     info "$(su -l "${userLogin}" -c 'git config --list')"
 }
-function configUserSSH()
-{
+function configUserSSH() {
     local -r userLogin="${1}"
     local -r groupName="${2}"
     local -r sshRSA="${3}"
@@ -2308,39 +1964,31 @@ function configUserSSH()
     chown -R "${userLogin}:${groupName}" "${userHome}/.ssh"
     cat "${userHome}/.ssh/${configFileName}"
 }
-function deleteUser()
-{
+function deleteUser() {
     local -r userLogin="${1}"
-    if [[ "$(existUserLogin "${userLogin}")" = 'true' ]]
-    then
-        userdel -f -r "${userLogin}" 2> '/dev/null' || true
+    if [[ "$(existUserLogin "${userLogin}")" = 'true' ]]; then
+        userdel -f -r "${userLogin}" 2>'/dev/null' || true
     fi
 }
-function existGroupName()
-{
+function existGroupName() {
     local -r group="${1}"
-    if [[ "$(grep -E -o "^${group}:" '/etc/group')" = '' ]]
-    then
+    if [[ "$(grep -E -o "^${group}:" '/etc/group')" = '' ]]; then
         echo 'false' && return 1
     fi
     echo 'true' && return 0
 }
-function existUserLogin()
-{
+function existUserLogin() {
     local -r user="${1}"
-    if ( id -u "${user}" > '/dev/null' 2>&1 )
-    then
+    if (id -u "${user}" >'/dev/null' 2>&1); then
         echo 'true' && return 0
     fi
     echo 'false' && return 1
 }
-function generateSSHPublicKeyFromPrivateKey()
-{
+function generateSSHPublicKeyFromPrivateKey() {
     local -r userLogin="${1}"
     local groupName="${2}"
     # Set Default
-    if [[ "$(isEmptyString "${groupName}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${groupName}")" = 'true' ]]; then
         groupName="${userLogin}"
     fi
     # Validate Input
@@ -2356,13 +2004,11 @@ function generateSSHPublicKeyFromPrivateKey()
     chown "${userLogin}:${groupName}" "${userHome}/.ssh/id_rsa.pub"
     cat "${userHome}/.ssh/id_rsa.pub"
 }
-function generateUserSSHKey()
-{
+function generateUserSSHKey() {
     local -r userLogin="${1}"
     local groupName="${2}"
     # Set Default
-    if [[ "$(isEmptyString "${groupName}")" = 'true' ]]
-    then
+    if [[ "$(isEmptyString "${groupName}")" = 'true' ]]; then
         groupName="${userLogin}"
     fi
     # Validate Input
@@ -2380,40 +2026,32 @@ function generateUserSSHKey()
     chown "${userLogin}:${groupName}" "${userHome}/.ssh/id_rsa" "${userHome}/.ssh/id_rsa.pub"
     cat "${userHome}/.ssh/id_rsa.pub"
 }
-function getCurrentUserHomeFolder()
-{
+function getCurrentUserHomeFolder() {
     getUserHomeFolder "$(whoami)"
 }
-function getProfileFilePath()
-{
+function getProfileFilePath() {
     local -r user="${1}"
     local -r userHome="$(getUserHomeFolder "${user}")"
-    if [[ "$(isEmptyString "${userHome}")" = 'false' && -d "${userHome}" ]]
-    then
+    if [[ "$(isEmptyString "${userHome}")" = 'false' && -d "${userHome}" ]]; then
         local -r bashProfileFilePath="${userHome}/.bash_profile"
         local -r profileFilePath="${userHome}/.profile"
-        if [[ ! -f "${bashProfileFilePath}" && -f "${profileFilePath}" ]]
-        then
+        if [[ ! -f "${bashProfileFilePath}" && -f "${profileFilePath}" ]]; then
             echo "${profileFilePath}"
         else
             echo "${bashProfileFilePath}"
         fi
     fi
 }
-function getUserGroupName()
-{
+function getUserGroupName() {
     local -r userLogin="${1}"
     checkExistUserLogin "${userLogin}"
     id -g -n "${userLogin}"
 }
-function getUserHomeFolder()
-{
+function getUserHomeFolder() {
     local -r user="${1}"
-    if [[ "$(isEmptyString "${user}")" = 'false' ]]
-    then
+    if [[ "$(isEmptyString "${user}")" = 'false' ]]; then
         local -r homeFolder="$(eval "echo ~${user}")"
-        if [[ "${homeFolder}" = "\~${user}" ]]
-        then
+        if [[ "${homeFolder}" = "\~${user}" ]]; then
             echo
         else
             echo "${homeFolder}"
@@ -2422,14 +2060,12 @@ function getUserHomeFolder()
         echo
     fi
 }
-function isUserLoginInGroupName()
-{
+function isUserLoginInGroupName() {
     local -r userLogin="${1}"
     local -r groupName="${2}"
     checkNonEmptyString "${userLogin}" 'undefined user login'
     checkNonEmptyString "${groupName}" 'undefined group name'
-    if [[ "$(existUserLogin "${userLogin}")" = 'true' ]] && [[ "$(groups "${userLogin}" | grep "\b${groupName}\b")" != '' ]]
-    then
+    if [[ "$(existUserLogin "${userLogin}")" = 'true' ]] && [[ "$(groups "${userLogin}" | grep "\b${groupName}\b")" != '' ]]; then
         echo 'true' && return 0
     fi
     echo 'false' && return 1

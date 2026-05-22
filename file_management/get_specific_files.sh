@@ -1,16 +1,14 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# Get specific files from a directory
-# Date: jue 16 mar 2023 05:02:38 CET
+# Get specific files from a directory.
+#
+# Dependencies: bash
 
-# Declare variables for directory path and file types
 img_dir=$HOME/Templates
 file_types=(jpg png)
 
-# Declare an empty array for files
 files=()
 
-# Function to get a list of all the files in the directory
 get_files() {
     for file in "$img_dir"/*."${file_types[@]}"; do
         if [ -f "$file" ]; then

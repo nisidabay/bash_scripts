@@ -1,8 +1,8 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
 # Convert one or more aac/m4a files to mp3.
+#
 # Dependencies: lame, mplayer
-##############################################################################
 
 # Constants for color codes
 readonly RED=$(tput setaf 1)
@@ -23,7 +23,7 @@ function check_dependencies() {
     local -r dependencies_array=("${@}")
     local missing_dependencies=0
     for program in "${dependencies_array[@]}"; do
-        if ! command -v "$program" &> /dev/null; then
+        if ! command -v "$program" &>/dev/null; then
             echo -e "${RED}[x]${RESET} $program ${RED}is not installed${RESET}"
             missing_dependencies=$((missing_dependencies + 1))
         else
@@ -47,7 +47,7 @@ function show_error() {
 
 # Function to display the help message
 function show_help() {
-    cat << EOF
+    cat <<EOF
 🎶 Utility to convert music from m4a or aac format to mp3 🎶
 
     Usage: ${0##*/} -b [nnn] -e [aac|m4a] -f [file]
@@ -84,7 +84,7 @@ function create_wav() {
 function create_mp3() {
     [[ $verbose ]] && echo -en "Creating output mp3 file..."
 
-    if ! ${LAME} -h -b "${bitrate}" "${1}" "${2}" > /dev/null; then
+    if ! ${LAME} -h -b "${bitrate}" "${1}" "${2}" >/dev/null; then
         echo ""
         show_error "Conversion to mp3 (${LAME}) failed."
         do_cleanup

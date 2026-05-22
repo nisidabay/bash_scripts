@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Spinner with log file monitoring.
+#
+# Dependencies: stat, tail
 
 # Path to the log file to monitor.
 logfile=/tmp/mylog
@@ -13,7 +17,7 @@ linelen=0
 function lastout() {
     # Read the last line from the log file.
     local line=$(tail -n 1 $logfile 2>/dev/null)
-    
+
     # Check if the line is non-empty.
     if [[ "$line" ]]; then
         # Print the line with a padding of five spaces, without a newline at the end.
@@ -21,7 +25,7 @@ function lastout() {
 
         # Calculate the number of extra spaces needed to clear out previous output.
         local len=${#line}
-        while (( len < linelen )); do
+        while ((len < linelen)); do
             # Print extra spaces to ensure previous longer lines are fully cleared.
             echo -n " "
             ((len++))
@@ -36,7 +40,7 @@ function lastout() {
 function spinout() {
     # The spinning character to display.
     local spinchar="$1"
-    
+
     # Check if the log file exists.
     if [[ -f $logfile ]]; then
         # Print the spinning character, overwriting the same line.
@@ -46,7 +50,7 @@ function spinout() {
 
         # Check if there is new content in the log file.
         local sz=$(stat --printf '%s' $logfile 2>/dev/null)
-        if (( sz > logsize )); then
+        if ((sz > logsize)); then
             # If new content is found, output the last line from the log file.
             lastout
             # Update the stored size of the log file.
@@ -59,7 +63,7 @@ function spinout() {
 if [[ -f $logfile ]]; then
     # Get the initial size of the log file.
     logsize=$(stat --printf '%s' $logfile 2>/dev/null)
-    if (( logsize > 0 )); then
+    if ((logsize > 0)); then
         # If the file has content, output an initial space and the last line.
         echo -n " "
         lastout

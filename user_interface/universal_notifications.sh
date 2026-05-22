@@ -1,6 +1,8 @@
-#!/bin/bash
-# This is template
-# Display notification in Linux/Mac
+#!/usr/bin/env bash
+#
+# Display desktop notifications.
+#
+# Dependencies: notify-send, osascript
 
 # Check the operating system
 if [[ "$untracked_changes" -gt 0 || "$staged_changes" -gt 0 ]]; then
@@ -24,5 +26,3 @@ if [[ "$untracked_changes" -gt 0 || "$staged_changes" -gt 0 ]]; then
         echo "Unsupported operating system"
     fi
 fi
-
-

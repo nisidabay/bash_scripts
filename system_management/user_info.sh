@@ -1,12 +1,13 @@
-#!/bin/sh 
-# 
-# Find users with account on the system
+#!/usr/bin/env bash
+#
+# Find user information on the system.
+#
 
 findUser() {
     read -p "Enter the user login: " LOGIN
 
     # Attempt to find the user in /etc/passwd
-    if cat /etc/passwd | grep "$LOGIN" > /dev/null; then
+    if cat /etc/passwd | grep "$LOGIN" >/dev/null; then
         echo "[+] Found user: $LOGIN"
         # Print detailed user information
         cat /etc/passwd | awk -v login="$LOGIN" 'BEGIN{FS=":"} $1 == login {print $1, $5, $6, $7}'

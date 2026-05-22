@@ -1,4 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Template for processing command-line options with getopts.
+#
+# Dependencies: none
 
 # Declare global variables
 declare -g time="" output="" file=""
@@ -22,14 +26,14 @@ opt_counter=0
 
 # Process options using getopts
 while getopts ":ht:o:f:" option; do
-  case $option in
+    case $option in
     t)
         time=$OPTARG
-        ((opt_counter+=1))
+        ((opt_counter += 1))
         ;;
     o)
         output=$OPTARG
-        ((opt_counter+=1))
+        ((opt_counter += 1))
         ;;
     f)
         file=$OPTARG
@@ -38,7 +42,7 @@ while getopts ":ht:o:f:" option; do
             echo "Error: File '$file' not found."
             exit 1
         fi
-        ((opt_counter+=1))
+        ((opt_counter += 1))
         ;;
     h)
         show_help
@@ -52,7 +56,7 @@ while getopts ":ht:o:f:" option; do
         echo "Option -$OPTARG requires an argument." >&2
         exit 1
         ;;
-  esac
+    esac
 done
 
 # Shift the positional parameters to leave only non-option arguments

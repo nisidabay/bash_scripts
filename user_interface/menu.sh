@@ -1,58 +1,92 @@
-opt_counter=0
-while getopts ":hse:i:d:f:" option;do
-  case $option in
-    s) 
-        #scan=$OPTARG
-        scan_network
-        ;;
-    e) 
-        # Only last octet
-        ip_ext=$OPTARG;(( opt_counter+=1 ))
-        (( IP_SHORT+=1 ))
+#!/usr/bin/env bash
+#
+# Menu template using case statements.
+#
 
-        is_ip_valid "$ip_ext"
+server_name=$(hostname)
+function memory_check() {
+    echo ""
+    echo "Memory usage on ${server_name} is: "
+    free -h
+    echo ""
+}
+function cpu_check() {
+    echo ""
+    echo "CPU load on ${server_name} is: "
+    echo ""
+    uptime
+    echo ""
+}
+function tcp_check() {
+    echo ""
+    echo "TCP connections on ${server_name}: "
+    echo ""
+    cat /proc/net/tcp | wc -l
+    echo ""
+}
+function kernel_check() {
+    echo ""
+    echo "Kernel version on ${server_name} is: "
+    echo ""
+    uname -r
+    echo ""
+}
+function all_checks() {
+    memory_check
+    cpu_check
+    tcp_check
+    kernel_check
+}
+##
+# Color  Variables
+##
+green='\e[32m'
+blue='\e[34m'
+clear='\e[0m'
+##
+# Color Functions
+##
+ColorGreen() {
+    echo -ne $green$1$clear
+}
+ColorBlue() {
+    echo -ne $blue$1$clear
+}
+menu() {
+    echo -ne "
+    Menu
+    $(ColorGreen '1)') Memory usage
+    $(ColorGreen '2)') CPU load
+    $(ColorGreen '3)') Number of TCP connections
+    $(ColorGreen '4)') Kernel version
+    $(ColorGreen '5)') Check All
+    $(ColorGreen '0)') Exit
+    $(ColorBlue 'Choose an option:') "
+    read a
+    case $a in
+    1)
+        memory_check
+        menu
         ;;
-    i) 
-        # Full IP address
-        IP_SHORT=0
-        ip_add=$OPTARG;(( opt_counter+=1 ))
-        is_ip_valid "$ip_add"
+    2)
+        cpu_check
+        menu
         ;;
-    d)
-        host_folder=$OPTARG;(( opt_counter+=1 ))
+    3)
+        tcp_check
+        menu
         ;;
-    f)
-        IFS=""
-        files+=($OPTARG);(( opt_counter+=1 ))
-        # echo "[*] DEBUG FLAG - Len args: ${#files[@]}"
+    4)
+        kernel_check
+        menu
         ;;
-    h) 
-        show_help
+    5)
+        all_checks
+        menu
         ;;
-    \?) 
-        echo -e "${gray}${red}[-] Invalid option -$OPTARG${reset}"
-        show_help
-        ;;
-
-    :) 
-        echo -e "${gray}${red}[-] Missing value for the argument [-$OPTARG]${reset}"
-        show_help
-        ;;
-  esac
-done
-shift $(( $OPTIND - 1 ))
-
-# Save the IFS for using with f option an pass arguments with spaces
-OLDIFS=$IFS
-if [[ "$opt_counter" -ge 3 ]];then
-    check_program_dependencies
-    get_remote_server_name "$ip_add"
-    # Change the IFS
-    IFS=""
-    transfer_files
-    # Restore IFS
-    IFS=$OLDIFS
-else
-    show_help
-fi
-
+    0) exit 0 ;;
+    *) echo WrongCommand ;;
+    esac
+}
+# Call the menu function
+menu

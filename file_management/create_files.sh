@@ -1,6 +1,8 @@
-#!/bin/bash
-
-# Create a number of files especified by the user
+#!/usr/bin/env bash
+#
+# Create a number of files specified by the user.
+#
+# Dependencies: touch, seq
 
 echo [+] Write the name of the file:
 read f
@@ -8,10 +10,7 @@ read f
 echo [+] Write the number of files to create:
 read n
 
-for i in $(seq 01 $n)
-do
-	echo Creating file $i-$f
-	touch $i-$f
-
+for i in $(seq 01 $n); do
+    echo Creating file $i-$f
+    touch $i-$f
 done
-

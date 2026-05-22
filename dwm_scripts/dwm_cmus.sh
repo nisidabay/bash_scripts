@@ -1,14 +1,12 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
-# A dwm_bar function that shows the current artist, track, position, duration, and status from cmus
-# Joe Standring <git@joestandring.com>
-# GNU GPLv3
-
+# Show cmus playback status.
+#
 # Dependencies: cmus
 
-dwm_cmus () {
+dwm_cmus() {
     SEP1="|"
-    if ps -C cmus > /dev/null; then
+    if ps -C cmus >/dev/null; then
         CMUSDATA=$(cmus-remote -Q)
         ARTIST=$(echo "$CMUSDATA" | grep -w '^tag artist' | awk '{gsub("tag artist ", "");print}')
         TRACK=$(echo "$CMUSDATA" | grep -w '^tag title' | awk '{gsub("tag title ", "");print}')
@@ -17,21 +15,21 @@ dwm_cmus () {
         STATUS=$(echo "$CMUSDATA" | grep -w '^status' | awk '{gsub("status ", "");print}')
         SHUFFLE=$(echo "$CMUSDATA" | grep -w '^set shuffle' | awk '{gsub("set shuffle ", "");print}')
 
-            if [ "$STATUS" = "playing" ]; then
-                STATUS="▶"
-            else
-                STATUS="⏸"
-            fi
+        if [ "$STATUS" = "playing" ]; then
+            STATUS="▶"
+        else
+            STATUS="⏸"
+        fi
 
-            if [ "$SHUFFLE" = "true" ]; then
-                SHUFFLE=" 🔀"
-            else
-                SHUFFLE=""
-            fi
-        
+        if [ "$SHUFFLE" = "true" ]; then
+            SHUFFLE=" 🔀"
+        else
+            SHUFFLE=""
+        fi
+
         printf "%s%s %s - %s " "$SEP1" "$STATUS" "$ARTIST" "$TRACK"
-        printf "%0d:%02d/" $((POSITION%3600/60)) $((POSITION%60))
-        printf "%0d:%02d" $((DURATION%3600/60)) $((DURATION%60))
+        printf "%0d:%02d/" $((POSITION % 3600 / 60)) $((POSITION % 60))
+        printf "%0d:%02d" $((DURATION % 3600 / 60)) $((DURATION % 60))
         printf "%s%s\n" "$SHUFFLE" "$SEP1"
     fi
 }

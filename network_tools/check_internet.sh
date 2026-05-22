@@ -1,7 +1,9 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# Checks that an internet connection exists.
+# Check if an internet connection exists.
 #
+# Dependencies: curl
+
 # Function to check and install a package
 check_and_install() {
     local package=$1

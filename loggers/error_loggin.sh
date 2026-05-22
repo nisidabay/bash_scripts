@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 #
-# Ignoring Interruptions Example
-# This script demonstrates how to temporarily ignore SIGINT
-# during critical operations, then restore normal behavior
+# Demonstrate temporary SIGINT ignore during critical operations.
 
 # Configuration
 ERROR_LOG="error_log.txt"

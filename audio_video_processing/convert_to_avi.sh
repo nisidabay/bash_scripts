@@ -1,9 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Convert MP4 to AVI using ffmpeg.
+#
+# Dependencies: ffmpeg
 
-# Convert MP4 to AVI using ffmpeg
 set -euox pipefail
 # Check if ffmpeg is installed
-if ! command -v ffmpeg &> /dev/null; then
+if ! command -v ffmpeg &>/dev/null; then
     echo "ffmpeg could not be found, please install it."
     exit 1
 fi

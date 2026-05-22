@@ -1,5 +1,9 @@
-#!/usr/bin/bash
-# Sync calendars
+#!/usr/bin/env bash
+#
+# Sync calcurse calendars via scp.
+#
+# Dependencies: scp
+
 echo "Syncronized calendars"
 echo "Blanco [20] - Manjaro [38] - iMac [77]"
 read -p "Enter the last ip octet to transfer to: " ip

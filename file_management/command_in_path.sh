@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
-#Find commands or executable scripts in PATH
+# Find commands or executable scripts in PATH.
+#
+# Dependencies: bash
 
 find_cmd_path() {
     local cmd="$1"

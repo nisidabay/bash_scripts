@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Check for suspicious established TCP connections.
+#
+# Dependencies: netstat, sudo
 
-# Check for suspicious network activity
-# Check for any established TCP connections
-
-sudo netstat -anp | grep -i "established" | \
-grep -v "127.0.0.1" | awk '{print $5}' | \
-cut -d: -f1 | sort | uniq -c | sort -n
-
+sudo netstat -anp | grep -i "established" |
+	grep -v "127.0.0.1" | awk '{print $5}' |
+	cut -d: -f1 | sort | uniq -c | sort -n
 
 # Why It Is Useful:
 
@@ -27,4 +27,3 @@ cut -d: -f1 | sort | uniq -c | sort -n
 # and present network data concisely. The use of such scripts can significantly
 # speed up the process of monitoring and analyzing network connections for
 # security purposes.
-

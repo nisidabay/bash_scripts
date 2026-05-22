@@ -1,26 +1,21 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# Generate random numbers with awk
+# Generate random numbers with awk.
+#
+# Dependencies: awk, date
 
 header_separator() {
-	# Get the current date
-	_date=$(date)
-	header="Logging started at $_date"
+    _date=$(date)
+    header="Logging started at $_date"
 
-	# Check if an argument is provided
-	if [[ $# -gt 0 && $1 == "end" ]]; then
-		# If provided argument: use "Logging ended"
-		header="Logging ended at $_date"
-	fi
+    if [[ $# -gt 0 && $1 == "end" ]]; then
+        header="Logging ended at $_date"
+    fi
 
-	# Get the length of the header
-	separator_length=${#header}
+    separator_length=${#header}
+    separator=$(printf '%*s' "$separator_length" | tr ' ' '-')
 
-	# Create a separator of the same length as the header
-	separator=$(printf '%*s' "$separator_length" | tr ' ' '-')
-
-	# Print the header and separator to the log file
-	printf "%s\n%s\n" "$header" "$separator"
+    printf "%s\n%s\n" "$header" "$separator"
 }
 
 header_separator

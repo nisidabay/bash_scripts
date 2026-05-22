@@ -1,20 +1,15 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# Change the backup colors in dwm.
-# By default dwm look for colors in .Xresources and if it cannot find the
-# color required there it falls back to its configuration.
+# Change dwm colors from pywal.
 #
-# It was a mere attemp to modify dwm apperances but its not worthy:
-# 1) dwm will loop up always for .Xresources and if it's not found won't start.
-# 2) you have to compile dwm and as before it will look up for .Xresources.
-# 3) consider this script as a REGEX practice.
-#
+# Dependencies: sed, grep, cut
+
 # Set the path to the colors-wal-dwm.h file
 COLORS_FILE="$HOME/.cache/wal/colors-wal-dwm.h"
-[[ -f $COLORS_FILE ]] || echo COLORS_FILE not exist 
+[[ -f $COLORS_FILE ]] || echo COLORS_FILE not exist
 # Set the path to the config.def.h file
 CONFIG_FILE="$HOME/dwm-luke/config.h"
-[[ -f $CONFIG_FILE ]] || echo COLORS_FILE not exist 
+[[ -f $CONFIG_FILE ]] || echo COLORS_FILE not exist
 
 # Extract the color values from colors-wal-dwm.h
 NORM_BG=$(grep "^static const char norm_bg" $COLORS_FILE | cut -d '"' -f 2)

@@ -1,18 +1,8 @@
 #!/usr/bin/env bash
 #
-# safe_backup.sh — Safely back up and process a  file.
-#
-# This script:
-# 1. Validates that the input file exists and has required permissions.
-# 2. Creates a backup (.bak) before any modification.
-# 3. Performs a safe in-place edit (example: replace a setting).
+# Safely back up and process a file.
 #
 # Usage: ./safe_backup.sh <config_file>
-#
-# Exit codes:
-#   0 — Success
-#   1 — General failure (e.g., validation, backup, or processing failed)
-#   2–7 — Specific validation or operation errors (see validate_file/backup_file)
 
 set -euo pipefail
 
@@ -29,54 +19,54 @@ set -euo pipefail
 #   3–6 — Permission-specific errors
 # -----------------------------------------------------------------------------
 validate_file() {
-    local file="$1"
-    local required_permissions="${2:-r}"
+	local file="$1"
+	local required_permissions="${2:-r}"
 
-    # Ensure a filename was provided
-    if [[ -z "$file" ]]; then
-        echo "validate_file: No filename provided" >&2
-        return 2
-    fi
+	# Ensure a filename was provided
+	if [[ -z "$file" ]]; then
+		echo "validate_file: No filename provided" >&2
+		return 2
+	fi
 
-    # Check file existence
-    if [[ ! -e "$file" ]]; then
-        echo "File not found: $file" >&2
-        return 1
-    fi
+	# Check file existence
+	if [[ ! -e "$file" ]]; then
+		echo "File not found: $file" >&2
+		return 1
+	fi
 
-    # Validate permissions based on requested access
-    case "$required_permissions" in
-    r)
-        if [[ ! -r "$file" ]]; then
-            echo "File not readable: $file" >&2
-            return 3
-        fi
-        ;;
-    w)
-        if [[ ! -w "$file" ]]; then
-            echo "File not writable: $file" >&2
-            return 4
-        fi
-        ;;
-    x)
-        if [[ ! -x "$file" ]]; then
-            echo "File not executable: $file" >&2
-            return 5
-        fi
-        ;;
-    rw)
-        if [[ ! -r "$file" ]] || [[ ! -w "$file" ]]; then
-            echo "File not readable and/or writable: $file" >&2
-            return 6
-        fi
-        ;;
-    *)
-        echo "validate_file: Unsupported permission mode '$required_permissions'" >&2
-        return 2
-        ;;
-    esac
+	# Validate permissions based on requested access
+	case "$required_permissions" in
+	r)
+		if [[ ! -r "$file" ]]; then
+			echo "File not readable: $file" >&2
+			return 3
+		fi
+		;;
+	w)
+		if [[ ! -w "$file" ]]; then
+			echo "File not writable: $file" >&2
+			return 4
+		fi
+		;;
+	x)
+		if [[ ! -x "$file" ]]; then
+			echo "File not executable: $file" >&2
+			return 5
+		fi
+		;;
+	rw)
+		if [[ ! -r "$file" ]] || [[ ! -w "$file" ]]; then
+			echo "File not readable and/or writable: $file" >&2
+			return 6
+		fi
+		;;
+	*)
+		echo "validate_file: Unsupported permission mode '$required_permissions'" >&2
+		return 2
+		;;
+	esac
 
-    return 0
+	return 0
 }
 
 # -----------------------------------------------------------------------------
@@ -90,19 +80,19 @@ validate_file() {
 #   7 — Copy operation failed
 # -----------------------------------------------------------------------------
 backup_file() {
-    local source="$1"
-    local backup="${2:-$source.bak}"
+	local source="$1"
+	local backup="${2:-$source.bak}"
 
-    # Only need read access to source for backup
-    validate_file "$source" "r" || return 1
+	# Only need read access to source for backup
+	validate_file "$source" "r" || return 1
 
-    if cp -f "$source" "$backup"; then
-        echo "Backup created: $backup"
-        return 0
-    else
-        echo "Failed to create backup of '$source' to '$backup'" >&2
-        return 7
-    fi
+	if cp -f "$source" "$backup"; then
+		echo "Backup created: $backup"
+		return 0
+	else
+		echo "Failed to create backup of '$source' to '$backup'" >&2
+		return 7
+	fi
 }
 
 # -----------------------------------------------------------------------------
@@ -117,21 +107,21 @@ backup_file() {
 #   1 — Any step failed (validation, backup, or edit)
 # -----------------------------------------------------------------------------
 process_config() {
-    local file="$1"
+	local file="$1"
 
-    # Need both read (to back up) and write (to modify) permissions
-    if ! validate_file "$file" "rw"; then
-        return 1
-    fi
+	# Need both read (to back up) and write (to modify) permissions
+	if ! validate_file "$file" "rw"; then
+		return 1
+	fi
 
-    # Always back up before modifying
-    if ! backup_file "$file"; then
-        echo "Aborting — cannot create backup of config file" >&2
-        return 1
-    fi
+	# Always back up before modifying
+	if ! backup_file "$file"; then
+		echo "Aborting — cannot create backup of config file" >&2
+		return 1
+	fi
 
-    echo "Config file processed successfully: $file"
-    return 0
+	echo "Config file processed successfully: $file"
+	return 0
 }
 
 # -----------------------------------------------------------------------------
@@ -143,20 +133,20 @@ process_config() {
 #   1 — Failure
 # -----------------------------------------------------------------------------
 main() {
-    if [[ $# -ne 1 ]]; then
-        echo "Usage: $0 <config_file>" >&2
-        exit 1
-    fi
+	if [[ $# -ne 1 ]]; then
+		echo "Usage: $0 <config_file>" >&2
+		exit 1
+	fi
 
-    local file="$1"
+	local file="$1"
 
-    if process_config "$file"; then
-        echo "Script completed successfully"
-        exit 0
-    else
-        echo "Script failed" >&2
-        exit 1
-    fi
+	if process_config "$file"; then
+		echo "Script completed successfully"
+		exit 0
+	else
+		echo "Script failed" >&2
+		exit 1
+	fi
 }
 
 # Run main with all arguments

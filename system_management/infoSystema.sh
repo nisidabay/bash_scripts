@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Display system information.
+#
 
 clear
 echo "Información del sistema"

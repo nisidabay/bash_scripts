@@ -1,6 +1,8 @@
-#!/usr/local/bin/bash
+#!/usr/bin/env bash
 #
-# Remove coments and empty lines. Create a copy of the file
+# Remove comments and empty lines from a file.
+#
+# Dependencies: sed
 
 function clean_file() {
     sed -i.bak '/^\s*#/d;/^$/d' "$1"

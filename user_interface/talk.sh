@@ -1,4 +1,7 @@
-#!/bin/bash
+#!/usr/bin/env bash
+#
+# Send selected text to festival TTS.
+#
+# Dependencies: xsel, festival
 
-# Send text to festival
 xsel | festival --tts --pipe

@@ -1,9 +1,8 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #
-# Author: https://gumirov.xyz/
-# Description: Change background image on i3wm 
-# Modified on: mar 17 ene 2023 08:08:01 CET, by ChatGPT
-# Dependencies: feh
+# Change background image on i3wm using feh.
+#
+# Dependencies: feh, shuf
 
 # Define the display
 export DISPLAY=":0"
@@ -13,7 +12,7 @@ bg_dir="$HOME/Pictures"
 
 # Create the directory if it doesn't exist
 if [ ! -d "$bg_dir" ]; then
-    mkdir -p "$bg_dir"
+	mkdir -p "$bg_dir"
 fi
 
 # Define the name of the current background image file
@@ -23,19 +22,18 @@ current_bg_image="current_bg_image.png"
 bg_num=$(find "$bg_dir" -maxdepth 1 -type f | wc -l)
 
 if [ "$bg_num" -ne 0 ]; then
-    # Remove the current background image
-    [ -f "$bg_dir/$current_bg_image" ] && rm "$bg_dir/$current_bg_image"
+	# Remove the current background image
+	[ -f "$bg_dir/$current_bg_image" ] && rm "$bg_dir/$current_bg_image"
 
-    # Get a random image from the directory
-    selected_bg=$(find "$bg_dir" -maxdepth 1 -type f | shuf -n 1)
+	# Get a random image from the directory
+	selected_bg=$(find "$bg_dir" -maxdepth 1 -type f | shuf -n 1)
 
-    # Create a symbolic link to the selected image with the name "current_bg_image.png"
-    ln -s "$selected_bg" "$bg_dir/$current_bg_image"
+	# Create a symbolic link to the selected image with the name "current_bg_image.png"
+	ln -s "$selected_bg" "$bg_dir/$current_bg_image"
 
-    # Refresh the wallpaper
-    feh --bg-fill "$bg_dir/$current_bg_image"
+	# Refresh the wallpaper
+	feh --bg-fill "$bg_dir/$current_bg_image"
 else
-    echo "No image files found in $bg_dir"
-    exit 1
+	echo "No image files found in $bg_dir"
+	exit 1
 fi
-

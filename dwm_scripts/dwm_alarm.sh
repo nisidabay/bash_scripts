@@ -1,12 +1,10 @@
-#!/bin/sh
+#!/usr/bin/env bash
+#
+# Display upcoming alarms.
+#
+# Dependencies: alarm
 
-# A dwm_status function that displays upcoming alarms from alarm.sh
-# Joe Standring <git@joestandring.com>
-# GNU GPLv3
-
-# Dependencies: https://github.com/joestandring/alarm
-
-dwm_alarm () {
+dwm_alarm() {
     for f in /tmp/alarm.*; do
         if [ -e "$f" ]; then
             printf "%s" "$SEP1"

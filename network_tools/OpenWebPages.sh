@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 #
-# Open favorite links from a text file
-# Modify by ChatGPT
-# Created in 2019
-# Modified date: mié 27 dic 2023 10:58:03 CET
+# Open favorite links from a text file.
+#
+# Dependencies: firefox, google-chrome, safari
 
 # Ansi color code variables for colored output
 red="\e[0;91m"

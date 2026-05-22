@@ -1,8 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
-# _GeneralCmdCheck: Checks if the provided arguments are valid shell commands.
-# Args:
-#   $@: List of commands to be checked.
+# Check if provided arguments are valid shell commands.
+#
+# Dependencies: none
+
 _GeneralCmdCheck() {
     # Iterate through the provided arguments
     for cmd in "$@"; do

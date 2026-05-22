@@ -1,10 +1,9 @@
-#!/bin/sh
+#!/usr/bin/env bash
+#
+# Show average system load.
+#
 
-# A dwm_bar function to read the average system load
-# Alvar Penning <post@0x21.biz>
-# GNU GPLv3
-
-dwm_loadavg () {
+dwm_loadavg() {
     # LOAD_FIELDS specifies the load average values to be displayed. Values
     # within 1-3 are allowed, passed as a range (-) or comma-separated.
     # - 1: load average within the last minute

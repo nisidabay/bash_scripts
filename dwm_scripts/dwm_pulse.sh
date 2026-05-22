@@ -1,15 +1,13 @@
-#!/bin/sh
-
-# A dwm_bar function to show the master volume of PulseAudio
-# Joe Standring <git@joestandring.com>
-# GNU GPLv3
-
+#!/usr/bin/env bash
+#
+# Show PulseAudio master volume.
+#
 # Dependencies: pamixer
 
-dwm_pulse () {
+dwm_pulse() {
     VOL=$(pamixer --get-volume)
     STATE=$(pamixer --get-mute)
-    
+
     printf "%s" "$SEP1"
     if [ "$IDENTIFIER" = "unicode" ]; then
         if [ "$STATE" = "true" ] || [ "$VOL" -eq 0 ]; then

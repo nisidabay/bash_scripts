@@ -1,10 +1,8 @@
-#!/bin/sh
-
-# A dwm_bar function to show the speed of download and upload.
-# Johan Chane <johanchanex@gmail.com>
-# GNU GPLv3
-
-# Dependencies:
+#!/usr/bin/env bash
+#
+# Show network download/upload speed.
+#
+# Dependencies: bc
 
 # This function parses /proc/net/dev file searching for a line containing $interface data.
 # Within that line, the first and ninth numbers after ':' are respectively the received and transmited bytes.
@@ -54,9 +52,9 @@ function dwm_network_speed {
 
     printf "%s" "$SEP1"
     if [ "$IDENTIFIER" = "unicode" ]; then
-        printf "李 %s %s"  "$(download_speed)" "$(upload_speed)"
+        printf "李 %s %s" "$(download_speed)" "$(upload_speed)"
     else
-        printf "Net %s %s"  "$(download_speed)" "$(upload_speed)"
+        printf "Net %s %s" "$(download_speed)" "$(upload_speed)"
     fi
     printf "%s\n" "$SEP2"
 }

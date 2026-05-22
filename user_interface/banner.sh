@@ -1,12 +1,14 @@
-#!/usr/bin/bash
-#Colours
-# Banner template
+#!/usr/bin/env bash
+#
+# Display a colored banner.
+#
+
 declare -r greenColour="\e[0;32m\033[1m"
 declare -r endColour="\033[0m\e[0m"
 declare -r redColour="\e[0;31m\033[1m"
 declare -r blueColour="\e[0;34m\033[1m"
 declare -r grayColour="\e[0;37m\033[1m"
-function banner(){
+function banner() {
     echo -e "${greenColour}
                       .
                    %%%%%%%.
@@ -24,6 +26,7 @@ function banner(){
              #%%%%%%%%%%%%%%%%%
                   %%%%%%%%#
                       .${endColour}\n"
-    for _ in $(seq 1 80); do echo -ne "${redColour}-"; done; echo -ne "${endColour}"
+    for _ in $(seq 1 80); do echo -ne "${redColour}-"; done
+    echo -ne "${endColour}"
 }
 banner
