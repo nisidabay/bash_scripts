@@ -1,18 +1,18 @@
 # Bash Scripts
 
-Personal collection of 209 Bash scripts for Arch Linux + dwm/niri.
+Personal collection of 195 Bash scripts for Arch Linux + dwm/niri. Dead weight pruned.
 
 - **9 directories** organized by purpose
 - Full catalog: [INDEX.md](INDEX.md)
 
 | Dir | Count | Purpose |
 |-----|-------|---------|
-| `desktop/` | 29 | TUI, dmenu, wallpaper, color pickers |
-| `dev/` | 9 | Templates, bash library, git, getopts |
-| `files/` | 22 | File ops, text processing, strings |
+| `desktop/` | 26 | TUI, dmenu, wallpaper, color pickers |
+| `dev/` | 7 | Templates, bash library, git, getopts |
+| `files/` | 21 | File ops, text processing, strings |
 | `learning/` | 12 | Educational Bash examples |
-| `media/` | 8 | Audio/video converters |
+| `media/` | 4 | Audio/video converters |
 | `reference_cards/` | 36 | dmenu/fuzzel cheat sheets |
 | `statusbar/` | 33 | dwmblocks modules |
-| `system/` | 41 | Network, security, sysadmin |
+| `system/` | 37 | Network, security, sysadmin |
 | `util/` | 8 | Toys, generators, git observer |

@@ -1,18 +1,18 @@
 # r_bash_scripts — Index
 
-209 Bash scripts across 9 directories. Personal collection for Arch Linux + dwm/niri.
+195 Bash scripts across 9 directories. Personal collection for Arch Linux + dwm/niri. Dead scripts pruned — platform-mismatched, stubs, one-liners.
 
 | Dir | Count | Purpose |
 |-----|-------|---------|
-| [desktop](#desktop) | 29 | TUI toys, dmenu tools, wallpaper, color pickers |
-| [dev](#dev) | 9 | Templates, bash library, git checker, getopts |
-| [files](#files) | 22 | File operations, text processing, string splitting |
+| [desktop](#desktop) | 26 | TUI toys, dmenu tools, wallpaper, color pickers |
+| [dev](#dev) | 7 | Templates, bash library, git checker, getopts |
+| [files](#files) | 21 | File operations, text processing, string splitting |
 | [learning](#learning) | 12 | Educational: pure bash, concepts, loggers, progress bars |
-| [media](#media) | 8 | Audio/video format converters |
+| [media](#media) | 4 | Audio/video format converters |
 | [reference_cards](#reference_cards) | 36 | dmenu/fuzzel-launched interactive cheat sheets |
 | [statusbar](#statusbar) | 33 | dwmblocks status bar modules (`sb-*`) |
-| [system](#system) | 41 | Network, security, sysadmin, system management |
-| [util](#util) | 8 | Toys, git observer, random generators |
+| [system](#system) | 37 | Network, security, sysadmin, system management |
+| [util](#util) | 8 | Toys, git observers, random generators |
 
 ---
 
@@ -23,14 +23,12 @@ TUI interface scripts, wallpaper changers, dmenu/Fuzzel tools, color pickers. Mo
 | Script | Lines | Dependencies | Purpose |
 |--------|-------|-------------|---------|
 | `banner.sh` | 32 | — | Display a colored banner |
-| `blankcd.sh` | 8 | cdrecord | Blank a CD-R |
 | `change_bg_lnx_feh.sh` | 39 | feh, shuf | Change background image using feh |
 | `change_bg_nitrogen.sh` | 32 | nitrogen | Change background image using nitrogen |
 | `change_dwm_colors.sh` | 38 | sed, grep, cut | Change dwm colors from pywal |
 | `colors_bash.sh` | 58 | — | Demonstrate ANSI color codes |
 | `color_test.sh` | 20 | — | Display color combinations table |
 | `create_list.sh` | 11 | file | List ASCII files in current directory |
-| `header_separator.sh` | 8 | — | Print a visual header separator |
 | `help_and_menu.sh` | 53 | — | Help and menu template |
 | `menu.sh` | 92 | — | Menu template using case statements |
 | `menu_univ.sh` | 62 | — | Universal menu with getopts |
@@ -42,7 +40,6 @@ TUI interface scripts, wallpaper changers, dmenu/Fuzzel tools, color pickers. Mo
 | `spinner.sh` | 28 | — | Spinner progress indicator |
 | `status_indicator.sh` | 28 | — | Show a loading status indicator |
 | `stty_hide_input.sh` | 20 | stty | Hide input with stty for password entry |
-| `talk.sh` | 7 | xsel, festival | Send selected text to festival TTS |
 | `tkinter_color.sh` | 566 | dmenu, xclip, notify-send | Select and copy Tkinter color codes via dmenu |
 | `tput_clock.sh` | 100 | tput, banner | Display a terminal clock |
 | `tput_colors.sh` | 15 | tput | Display available terminal colors |
@@ -62,10 +59,8 @@ Templates, the bash library, git tools, and development helpers.
 |--------|-------|-------------|---------|
 | `bash_library.sh` | 2,086 | bash, curl, jq, python, sed, awk, tar, unzip, lsof, iptables, dd, git, md5sum | Collection of bash utility functions |
 | `check_git_status.sh` | 66 | git | Verify the status of git directories |
-| `dbvis.sh` | 8 | dbvis | Execute DbVisualizer |
 | `getopts_skeleton.sh` | 72 | — | Skeleton demonstrating getopts usage |
 | `getopts_template.sh` | 73 | — | Template for processing command-line options with getopts |
-| `google-search.sh` | 17 | firefox | Realiza una busqueda en Google |
 | `script_index.sh` | 27 | column, grep, sed | Generate an index of scripts in the current directory |
 | `sourcing_example.sh` | 17 | — | Demonstrate sourcing a script in Bash |
 | `valid_command.sh` | 18 | — | Check if provided arguments are valid shell commands |
@@ -87,8 +82,6 @@ File operations, text processing, string manipulation. Educational + practical.
 | `create_files.sh` | 16 | touch, seq | Create a number of files specified by the user |
 | `get_specific_files.sh` | 26 | bash | Get specific files from a directory |
 | `list_unhidden_dirs.sh` | 8 | find, tee | Create a list of unhidden folders in HOME |
-| `makedir.sh` | 20 | mkdir | Make directory with custom permissions |
-| `normdate.sh` | 9 | bash | Normalize dates in various formats |
 | `openFileDmenu.sh` | 12 | dmenu, find, xdg-open | Open file with dmenu |
 | `read_file.sh` | 9 | bash | Read file or stdin line by line |
 | `read_from_file.sh` | 13 | bash | Read and display a file line by line |
@@ -132,11 +125,7 @@ Audio/video format converters. Some are platform-specific (tagged below).
 |--------|-------|-------------|---------|
 | `aac2mp3_clm.sh` | 185 | lame, mplayer | Convert one or more aac/m4a files to mp3 |
 | `avi2mp4.sh` | 182 | ffmpeg, mencoder, gdialog, zenity, file | Convert FLV/RM/MPEG/AVI to AVI/MP4 |
-| `convert_mkv_to_avi.sh` | 34 | ffmpeg | Convert MKV to AVI using ffmpeg |
-| `convert_to_avi.sh` | 33 | ffmpeg | Convert MP4 to AVI using ffmpeg |
 | `flac2mp3.sh` | 11 | ffmpeg | Convert FLAC files to MP3 |
-| `split_avi.sh` | 28 | ffmpeg | Split AVI file into smaller chunks |
-| `txt2mp3_mac.sh` | 165 | espeak, lame, mpg123 | **macOS only** — Text to MP3 |
 | `txt2mp3.sh` | 174 | pico, lame, mpg123, aplay | **Linux** — Text to MP3 |
 
 ---
@@ -248,14 +237,12 @@ Network tools, security (LUKS, passwords, USB encryption), system management, sy
 | `check_dependencies.sh` | 48 | tput | Check if specified programs are installed |
 | `check_internet.sh` | 31 | curl | Check if an internet connection exists |
 | `check_size.sh` | 18 | — | Check the size of a file |
-| `clean_file.sh` | 9 | sed | Remove comments and empty lines from a file |
 | `close_crypto_vault.sh` | 57 | cryptsetup, losetup, umount, rm | Close and clean up an encrypted image |
 | `connected_devices.sh` | 24 | ping | Find connected devices on the local network |
 | `connectivity.sh` | 21 | nslookup, awk | Check network connectivity |
 | `crypto_image_lnx.sh` | 596 | truncate, losetup, cryptsetup, mkfs.ext4, chattr | Create a LUKS encrypted image |
 | `detect_connections.sh` | 19 | netstat, awk, grep, sort, uniq, cut | List established external connections |
 | `devs_local_network.sh` | 28 | arp, sed, awk, ping | Find connected devices on local network |
-| `download_repos.sh` | 9 | git | Download repositories from a file |
 | `folder_size.sh` | 47 | du, awk | Check if folder size exceeds a limit |
 | `genpasswd.sh` | 123 | tr, tee | Generate random passwords |
 | `genpasswd_sha.sh` | 74 | date, sha256sum, fold, shuf | Generate a random password |
@@ -265,7 +252,6 @@ Network tools, security (LUKS, passwords, USB encryption), system management, sy
 | `install.sh` | 743 | git, curl | Install Homebrew |
 | `install_dmenu_scripts.sh` | 29 | file, ln | Symlink dmenu scripts to ~/bin |
 | `install_font.sh` | 17 | wget, unzip, fc-cache | Download and install Source Code Pro fonts |
-| `install_snap.sh` | 7 | apt, snap | Install snapd and snap-store |
 | `lib_validation.sh` | 66 | — | Reusable Bash validation functions |
 | `make_iso.sh` | 48 | mkisofs | Create a bootable ISO image |
 | `man2pdf.sh` | 11 | man, ps2pdf | Convert man page to PDF |
@@ -279,7 +265,6 @@ Network tools, security (LUKS, passwords, USB encryption), system management, sy
 | `setup_environment.sh` | 96 | python3, pip, sed, find | Set up Python virtual environments |
 | `sudo_privileges.sh` | 40 | apt-get | Update system packages with sudo |
 | `suspicious_network_activity.sh` | 29 | netstat, sudo | Check for suspicious established TCP connections |
-| `sync_calc.sh` | 11 | scp | Sync calcurse calendars via scp |
 | `usb_encrypt.sh` | 220 | lsblk, cryptsetup, notify-send, dunst | Encrypt, mount, and unmount a USB drive |
 | `user_info.sh` | 28 | — | Find user information on the system |
 
@@ -307,7 +292,7 @@ Toys, git observer, random generators. Lightweight.
 - **X11-only**: scripts that use xdotool, xclip, dmenu (without fuzzel fallback), setxkbmap, xbacklight, or redshift. These work when running dwm but not under Wayland/niri.
 - **Wayland-only**: `fuzzel-ai-prompts.sh`.
 - **Dual**: all other dmenu/fuzzel scripts auto-detect the active display server.
-- **macOS** reference scripts archived but not functional on Arch: `txt2mp3_mac.sh`, `install_snap.sh` (apt/snap).
+- **macOS** reference scripts removed. `txt2mp3.sh` (Linux) kept.
 
 ## Active vs. archival
 
@@ -317,4 +302,3 @@ The key distinction: scripts you actually reach for vs. scripts you wrote once a
 - **Solid when needed**: `system/crypto_image_lnx.sh`, `system/usb_encrypt.sh`, `system/remote_transfer.sh`, `system/genpasswd.sh`.
 - **Learning/reference**: Everything in `learning/`, small educational snippets in `files/`.
 - **Toys**: `util/lottery.sh`, `util/multiplication_table.sh`, `util/random_*.sh`.
-- **Dead/untested on this system**: `txt2mp3_mac.sh` (macOS), `install_snap.sh` (uses apt), `blankcd.sh` (CD-R in 2026?), `normdate.sh` (9 lines, empty function stub).
