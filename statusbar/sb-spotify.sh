@@ -3,7 +3,7 @@
 # Display Spotify song info for dwmblocks.
 #
 # Dependencies: playerctl, notify-send
-# Environment: $TERMINAL
+# Environment: $TERMINAL, $EDITOR
 if ! command -v playerctl &>/dev/null; then
     echo "Error: 'playerctl' is not installed. Please install it to use this script."
     exit 1

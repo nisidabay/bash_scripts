@@ -3,6 +3,7 @@
 # Show lf file manager mappings in dmenu.
 #
 # Dependencies: dmenu
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 declare -a mappings
 

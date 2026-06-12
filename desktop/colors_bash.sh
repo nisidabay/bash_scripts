@@ -2,6 +2,8 @@
 #
 # Demonstrate ANSI color codes.
 #
+# Dependencies: none
+#
 
 # Ansi color code variables
 red="\e[0;91m"

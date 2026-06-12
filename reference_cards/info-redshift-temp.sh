@@ -3,6 +3,7 @@
 # Display redshift color temperature for status bar.
 #
 # Dependencies: redshift, bc
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 if pgrep -x "redshift" >/dev/null; then
     temp=$(redshift -p 2>/dev/null | grep -i temp | cut -d ":" -f 2 | tr -dc "[:digit:]")

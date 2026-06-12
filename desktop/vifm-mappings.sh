@@ -3,7 +3,7 @@
 # Show Vifm custom keys and commands via dmenu/fuzzel.
 #
 # Dependencies: dmenu or fuzzel, notify-send
-# Environment: $WAYLAND_DISPLAY, $HOME
+#
 
 notify_user() {
     local title="$1" message="$2" severity="$3"

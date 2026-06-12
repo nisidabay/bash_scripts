@@ -3,7 +3,7 @@
 # Select Bash test expressions and flags to insert.
 #
 # Dependencies: dmenu, xclip, xdotool, notify-send
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 # --- Configuration ---
 # 1. Load your color theme if it exists (for dmenu colors)
 if [[ -f "${HOME}/bin/dmenu_wal.sh" ]]; then

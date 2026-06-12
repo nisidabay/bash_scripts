@@ -3,6 +3,7 @@
 # Show Wi-Fi connection status via wpa_cli.
 #
 # Dependencies: wpa_cli
+# Environment: $TERMINAL, $EDITOR
 
 dwm_wpa() {
     CONSTATE=$(wpa_cli status | sed -n '/wpa_state/s/^.*=//p')

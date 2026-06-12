@@ -3,7 +3,7 @@
 # Show and insert common fd commands to the terminal.
 #
 # Dependencies: fd, dmenu, xclip, xdotool, notify-send
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 # Source appearance config (optional: check if exists)
 if [[ ! -f "${HOME}/bin/dmenu_wal.sh" ]]; then

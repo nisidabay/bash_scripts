@@ -3,6 +3,7 @@
 # Display current keyboard layout.
 #
 # Dependencies: xorg-setxkbmap
+# Environment: $TERMINAL, $EDITOR
 
 dwm_keyboard() {
     printf "%s" "$SEP1"

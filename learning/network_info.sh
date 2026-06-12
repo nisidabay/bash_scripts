@@ -2,6 +2,7 @@
 #
 # Display network interface information.
 #
+# Dependencies: ip
 
 set -euo pipefail
 trap 'handle_error $LINENO' ERR

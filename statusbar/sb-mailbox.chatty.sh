@@ -3,7 +3,7 @@
 # Display unread mail count with sync for dwmblocks.
 #
 # Dependencies: offlineimap, notify-send
-# Environment: $TERMINAL
+# Environment: $TERMINAL, $EDITOR
 
 # Define configuration variables
 readonly MESSAGES_COUNT_FILE=~/.notmuch_count_messages

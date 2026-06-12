@@ -3,6 +3,7 @@
 # Show network connection info.
 #
 # Dependencies: NetworkManager, curl
+# Environment: $TERMINAL, $EDITOR
 
 dwm_networkmanager() {
     CONNAME=$(nmcli -a | grep 'Wired connection' | awk 'NR==1{print $1}')

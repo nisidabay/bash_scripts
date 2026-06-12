@@ -2,6 +2,8 @@
 #
 # Display system information.
 #
+# Dependencies: none
+#
 
 clear
 echo "Información del sistema"

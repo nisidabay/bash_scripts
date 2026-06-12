@@ -2,6 +2,8 @@
 #
 # Help and menu template.
 #
+# Dependencies: none
+#
 
 function show_help() {
     cat <<EOF

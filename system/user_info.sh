@@ -2,6 +2,8 @@
 #
 # Find user information on the system.
 #
+# Dependencies: grep, awk
+#
 
 findUser() {
     read -p "Enter the user login: " LOGIN

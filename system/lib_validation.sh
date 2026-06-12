@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 #
 # Reusable Bash validation functions.
+#
+# Dependencies: none
+#
 validate_with_pattern() {
 	local input="$1"
 	local pattern="$2"

@@ -3,6 +3,7 @@
 # Display Bluetooth status for dwmblocks.
 #
 # Dependencies: bluetoothctl, notify-send
+# Environment: $TERMINAL, $EDITOR
 
 # Debugging: Log the BLOCK_BUTTON value
 echo "BLOCK_BUTTON: $BLOCK_BUTTON" >>/tmp/bluetooth-debug.log

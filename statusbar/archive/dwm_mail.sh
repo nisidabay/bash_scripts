@@ -2,6 +2,8 @@
 #
 # Display inbox email count.
 #
+# Dependencies: none
+# Environment: $TERMINAL, $EDITOR
 
 dwm_mail() {
     MAILBOX=$(ls /path/to/inbox | wc -l)

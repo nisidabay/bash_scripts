@@ -3,6 +3,7 @@
 # Show currency rate against USD.
 #
 # Dependencies: curl
+# Environment: $TERMINAL, $EDITOR
 
 # Change the value of CURRENCY to match your currency code
 dwm_currency() {

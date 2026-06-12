@@ -2,6 +2,8 @@
 #
 # Prompt to continue inside a loop.
 #
+# Dependencies: none
+#
 
 _continue() {
     # Add default value

@@ -3,7 +3,7 @@
 # Show and insert common cut patterns.
 #
 # Dependencies: dmenu, xclip, xdotool, notify-send
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 # shellcheck disable=SC1091
 # Source appearance config

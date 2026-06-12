@@ -3,6 +3,7 @@
 # Show weather from wttr.in.
 #
 # Dependencies: curl
+# Environment: $TERMINAL, $EDITOR
 
 # Change the value of LOCATION to match your city
 dwm_weather() {

@@ -2,6 +2,8 @@
 #
 # Check the size of a file.
 #
+# Dependencies: none
+#
 
 read -p "Enter the name of the file with extension: " FILE
 

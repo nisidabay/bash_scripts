@@ -3,7 +3,7 @@
 # Open Bash help page in dmenu.
 #
 # Dependencies: dmenu, terminal
-# Environment: $TERMINAL, $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 # --- Configuration ---
 

@@ -2,6 +2,8 @@
 #
 # Display color combinations table.
 #
+# Dependencies: none
+#
 
 text="xYz" # Some test text
 

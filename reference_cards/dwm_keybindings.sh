@@ -3,7 +3,7 @@
 # Display DWM/sxhkd keybindings in dmenu.
 #
 # Dependencies: dmenu, notify-send
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 # 1. Load Pywal colors if available
 if [ -f "${HOME}/bin/dmenu_wal.sh" ]; then

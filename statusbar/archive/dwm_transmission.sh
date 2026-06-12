@@ -3,6 +3,7 @@
 # Show torrent status.
 #
 # Dependencies: transmission-remote
+# Environment: $TERMINAL, $EDITOR
 
 dwm_transmission() {
     TORRENT=$(transmission-remote -l | sed '2q;d' | sed 's/\(.\) /\1/g')

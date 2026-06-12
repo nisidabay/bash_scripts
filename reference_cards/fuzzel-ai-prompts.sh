@@ -3,7 +3,7 @@
 # Manage AI prompts using Fuzzel and kitty on Wayland.
 #
 # Dependencies: fuzzel, kitty, wl-copy, notify-send, nvim, fzf
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 PROMPTS_DIR="$HOME/ai_prompts/"
 TERMINAL="kitty"

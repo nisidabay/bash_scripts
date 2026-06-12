@@ -2,6 +2,7 @@
 #
 # Display system information.
 #
+# Dependencies: df, free, uptime
 
 set -euo pipefail
 trap 'handle_error $LINENO' ERR

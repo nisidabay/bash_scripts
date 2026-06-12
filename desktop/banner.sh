@@ -2,6 +2,8 @@
 #
 # Display a colored banner.
 #
+# Dependencies: none
+#
 
 declare -r greenColour="\e[0;32m\033[1m"
 declare -r endColour="\033[0m\e[0m"

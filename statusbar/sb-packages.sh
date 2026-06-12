@@ -3,7 +3,7 @@
 # Display available package updates for dwmblocks.
 #
 # Dependencies: checkupdates, notify-send
-# Environment: $TERMINAL
+# Environment: $TERMINAL, $EDITOR
 
 # Get the count of available updates. The '|| true' prevents the script
 # from exiting if checkupdates fails (e.g., no internet connection).

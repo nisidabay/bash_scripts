@@ -2,6 +2,8 @@
 #
 # Show current date and time.
 #
+# Dependencies: none
+# Environment: $TERMINAL, $EDITOR
 
 dwm_date() {
     printf "%s" "$SEP1"

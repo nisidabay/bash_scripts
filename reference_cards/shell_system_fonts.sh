@@ -3,7 +3,7 @@
 # Display system fonts via dmenu.
 #
 # Dependencies: dmenu, fc-list
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 # shellcheck disable=SC1091
 # Source appearance config
 [[ -f "${HOME}/bin/dmenu_wal.sh" ]] && source "${HOME}/bin/dmenu_wal.sh"

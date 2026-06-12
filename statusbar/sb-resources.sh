@@ -2,6 +2,8 @@
 #
 # Show memory, CPU, and storage info.
 #
+# Dependencies: none
+# Environment: $TERMINAL, $EDITOR
 
 df_check_location='/'
 # df_check_location='/home'

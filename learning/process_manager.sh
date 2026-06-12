@@ -2,6 +2,7 @@
 #
 # Manage system processes.
 #
+# Dependencies: ps, pgrep
 
 set -euo pipefail
 trap 'handle_error $LINENO' ERR

@@ -2,6 +2,8 @@
 #
 # Backup a file with timestamp.
 #
+# Dependencies: none
+#
 
 # Directory for saving the files
 DIR="/floppy"

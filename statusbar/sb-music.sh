@@ -3,7 +3,7 @@
 # Display music status for dwmblocks.
 #
 # Dependencies: cmus, notify-send
-# Environment: $TERMINAL
+# Environment: $TERMINAL, $EDITOR
 
 icon="🎵"
 echo "$icon"

@@ -3,7 +3,7 @@
 # Select and copy Bash declare statements to clipboard.
 #
 # Dependencies: dmenu, xclip, notify-send
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 # shellcheck disable=SC1091
 # Source appearance config

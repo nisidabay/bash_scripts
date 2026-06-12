@@ -3,7 +3,7 @@
 # Run Ollama from dwmblocks.
 #
 # Dependencies: ollama, notify-send
-# Environment: $TERMINAL, $HOME
+# Environment: $TERMINAL, $EDITOR
 
 TERMINAL="st"
 script=~/bin/lola.sh

@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
 # Simple terminal progress bar example.
+#
+# Dependencies: none
 total=50
 
 # Loop over the iterations and update the progress bar

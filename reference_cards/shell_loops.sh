@@ -3,7 +3,7 @@
 # Show and insert shell loop templates.
 #
 # Dependencies: dmenu, xdotool, notify-send
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 DMENUFONT="Fisa Code:style=Italic:size=12"
 declare -a loops
 

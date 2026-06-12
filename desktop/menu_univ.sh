@@ -2,6 +2,8 @@
 #
 # Universal menu with getopts.
 #
+# Dependencies: none
+#
 
 opt_counter=0
 while getopts ":hse:i:d:f:" option; do

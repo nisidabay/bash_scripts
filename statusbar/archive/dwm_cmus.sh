@@ -3,6 +3,7 @@
 # Show cmus playback status.
 #
 # Dependencies: cmus
+# Environment: $TERMINAL, $EDITOR
 
 dwm_cmus() {
     SEP1="|"

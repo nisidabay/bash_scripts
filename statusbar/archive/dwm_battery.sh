@@ -2,6 +2,8 @@
 #
 # Show battery level and status.
 #
+# Dependencies: none
+# Environment: $TERMINAL, $EDITOR
 
 dwm_battery() {
     # Change BAT1 to whatever your battery is identified as. Typically BAT0 or BAT1

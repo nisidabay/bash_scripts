@@ -3,6 +3,7 @@
 # Show mpc playback status.
 #
 # Dependencies: mpc
+# Environment: $TERMINAL, $EDITOR
 
 dwm_mpc() {
     if ps -C mpd >/dev/null; then

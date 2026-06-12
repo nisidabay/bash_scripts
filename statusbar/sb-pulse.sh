@@ -3,6 +3,7 @@
 # Show PulseAudio master volume.
 #
 # Dependencies: pamixer
+# Environment: $TERMINAL, $EDITOR
 
 dwm_pulse() {
     VOL=$(pamixer --get-volume)

@@ -3,6 +3,7 @@
 # Show network download/upload speed.
 #
 # Dependencies: bc
+# Environment: $TERMINAL, $EDITOR
 
 # This function parses /proc/net/dev file searching for a line containing $interface data.
 # Within that line, the first and ninth numbers after ':' are respectively the received and transmited bytes.

@@ -3,7 +3,6 @@
 # Track the status of local git repositories.
 #
 # Dependencies: git, notify-send
-# Environment: $HOME
 
 set -euo pipefail
 #

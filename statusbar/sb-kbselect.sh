@@ -3,7 +3,7 @@
 # Change keyboard layout via dmenu for dwmblocks.
 #
 # Dependencies: dmenu, setxkbmap
-# Environment: $HOME
+# Environment: $TERMINAL, $EDITOR
 
 # shellcheck disable=SC1091
 # Source appearance config

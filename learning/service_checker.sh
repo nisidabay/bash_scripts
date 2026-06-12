@@ -2,6 +2,7 @@
 #
 # Check systemd service status.
 #
+# Dependencies: systemctl, pgrep
 
 set -euo pipefail
 trap 'handle_error $LINENO' ERR

@@ -3,6 +3,7 @@
 # Show active VPN connections.
 #
 # Dependencies: NetworkManager, NetworkManager-openvpn
+# Environment: $TERMINAL, $EDITOR
 
 dwm_vpn() {
     VPN=$(nmcli -a | grep 'VPN connection' | sed -e 's/\( VPN connection\)*$//g')

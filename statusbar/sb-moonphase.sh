@@ -3,7 +3,7 @@
 # Display current moon phase for dwmblocks.
 #
 # Dependencies: curl
-# Environment: $XDG_DATA_HOME, $HOME
+# Environment: $TERMINAL, $EDITOR
 
 moonfile="${XDG_DATA_HOME:-$HOME/.local/share}/moonphase"
 

@@ -3,6 +3,7 @@
 # Show ALSA master volume.
 #
 # Dependencies: alsa-utils
+# Environment: $TERMINAL, $EDITOR
 
 dwm_alsa() {
     STATUS=$(amixer sget Master | tail -n1 | sed -r "s/.*\[(.*)\]/\1/")

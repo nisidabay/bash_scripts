@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
 # Demonstrate temporary SIGINT ignore during critical operations.
+#
+# Dependencies: none
 
 # Configuration
 ERROR_LOG="error_log.txt"

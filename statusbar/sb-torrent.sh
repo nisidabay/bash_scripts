@@ -3,6 +3,7 @@
 # Display transmission torrent status for dwmblocks.
 #
 # Dependencies: transmission-remote, notify-send
+# Environment: $TERMINAL, $EDITOR
 transmission-remote -l | grep -v "Sum:" | tail -n +2 |
     sed "
     s/^.*[[:space:]]Stopped[[:space:]].*/🛑/;

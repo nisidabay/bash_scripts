@@ -2,6 +2,8 @@
 #
 # Menu template using case statements.
 #
+# Dependencies: hostname, free, uptime, cat, wc, uname
+#
 
 server_name=$(hostname)
 function memory_check() {

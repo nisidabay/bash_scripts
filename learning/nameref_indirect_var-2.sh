@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
 # Demonstrate nameref and indirect array modification.
+#
+# Dependencies: none
 check_nameref() {
 	# 'ref' is now an alias for the variable whose name was passed in $1
 	declare -n ref="$1"

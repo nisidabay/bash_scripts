@@ -3,6 +3,7 @@
 # Show Spotify playback status.
 #
 # Dependencies: spotify/spotifyd, playerctl
+# Environment: $TERMINAL, $EDITOR
 
 dwm_spotify() {
     if ps -C spotify >/dev/null; then

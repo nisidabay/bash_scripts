@@ -3,7 +3,7 @@
 # Open vim mappings file in terminal editor.
 #
 # Dependencies: terminal, editor
-# Environment: $TERMINAL, $EDITOR, $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 MAPPINGS_DIR="$HOME/bin/vim_mappings"
 MAPPINGS_FILE="$MAPPINGS_DIR/vim_mappings.md"

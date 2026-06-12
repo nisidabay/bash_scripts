@@ -3,7 +3,7 @@
 # Display public IP and country flag for dwmblocks.
 #
 # Dependencies: curl, geoiplookup
-# Environment: $XDG_DATA_HOME, $HOME
+# Environment: $TERMINAL, $EDITOR
 
 # Ensure the required commands are available
 command -v curl >/dev/null 2>&1 || {

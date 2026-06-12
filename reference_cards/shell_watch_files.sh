@@ -3,7 +3,7 @@
 # Show and insert watch commands to monitor files and processes.
 #
 # Dependencies: dmenu, xclip, xdotool, notify-send
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 # shellcheck disable=SC1091
 # Source appearance config
 if [[ ! -f "${HOME}/bin/dmenu_wal.sh" ]]; then

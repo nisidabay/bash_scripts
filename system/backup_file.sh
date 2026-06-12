@@ -2,6 +2,8 @@
 #
 # Safely back up and process a file.
 #
+# Dependencies: none
+#
 # Usage: ./safe_backup.sh <config_file>
 
 set -euo pipefail

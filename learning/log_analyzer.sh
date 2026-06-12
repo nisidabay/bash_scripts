@@ -2,6 +2,7 @@
 #
 # Parse and analyze log files.
 #
+# Dependencies: none
 
 set -euo pipefail
 trap 'handle_error $LINENO' ERR

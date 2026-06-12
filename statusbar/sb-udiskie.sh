@@ -3,7 +3,7 @@
 # Mount USB drives with udiskie for dwmblocks.
 #
 # Dependencies: udiskie, dmenu, lsblk, notify-send
-# Environment: $TERMINAL, $HOME, $USER
+# Environment: $TERMINAL, $EDITOR
 # Apply DMENU_APPEARANCE
 if [[ ! -f "${HOME}/bin/dmenu_wal.sh" ]]; then
     echo "Error: dmenu_wal.sh not found" >&2

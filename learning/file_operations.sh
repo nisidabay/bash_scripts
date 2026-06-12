@@ -2,6 +2,7 @@
 #
 # Perform common file operations.
 #
+# Dependencies: none
 
 set -euo pipefail
 trap 'handle_error $LINENO' ERR

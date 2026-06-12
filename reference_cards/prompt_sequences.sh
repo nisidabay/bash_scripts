@@ -3,7 +3,7 @@
 # Show and insert shell prompt variables to the terminal.
 #
 # Dependencies: dmenu, xclip, xdotool, notify-send
-# Environment: $HOME
+# Environment: $WAYLAND_DISPLAY, $HOME
 
 # Source appearance config
 # shellcheck disable=SC1091

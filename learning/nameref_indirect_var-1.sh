@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
 # Demonstrate nameref and indirect variable expansion for pass-by-reference.
+#
+# Dependencies: none
 # Method 1: Using a name reference (`nameref`)
 # This is generally the preferred, more modern method.
 # ==============================================================================

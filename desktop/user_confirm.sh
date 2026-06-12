@@ -2,6 +2,8 @@
 #
 # Ask user for confirmation.
 #
+# Dependencies: none
+#
 
 Quit() {
     # Declare local variables for the function

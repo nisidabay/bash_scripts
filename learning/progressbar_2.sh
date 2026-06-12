@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 #
 # Visual terminal progress bar.
+#
+# Dependencies: none
 progress-bar() {
 	local duration=${1} # Capture the first argument as the duration of the progress bar.
 

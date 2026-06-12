@@ -2,6 +2,8 @@
 #
 # Show average system load.
 #
+# Dependencies: none
+# Environment: $TERMINAL, $EDITOR
 
 dwm_loadavg() {
     # LOAD_FIELDS specifies the load average values to be displayed. Values

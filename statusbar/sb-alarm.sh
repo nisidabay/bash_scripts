@@ -3,6 +3,7 @@
 # Display upcoming alarms.
 #
 # Dependencies: alarm
+# Environment: $TERMINAL, $EDITOR
 
 dwm_alarm() {
     for f in /tmp/alarm.*; do

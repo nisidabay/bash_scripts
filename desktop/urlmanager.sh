@@ -3,7 +3,7 @@
 # URL manager with dmenu and ROT13 encoding.
 #
 # Dependencies: dmenu, xclip or wl-copy, notify-send, browser
-# Environment: $HOME, $XDG_CONFIG_HOME
+#
 
 # =============
 # HARD CODED WORKING DIR

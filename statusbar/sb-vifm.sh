@@ -3,7 +3,7 @@
 # Launch file managers from dwmblocks.
 #
 # Dependencies: terminal, vifm or lf or yazi
-# Environment: $TERMINAL
+# Environment: $TERMINAL, $EDITOR
 VIFM=vifm
 LF=lf
 YAZI=yazi

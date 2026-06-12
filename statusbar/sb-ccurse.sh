@@ -3,6 +3,7 @@
 # Show closest calcurse appointment.
 #
 # Dependencies: calcurse
+# Environment: $TERMINAL, $EDITOR
 
 dwm_ccurse() {
     APTSFILE="$HOME/.calcurse/apts"
