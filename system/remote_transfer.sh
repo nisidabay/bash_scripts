@@ -139,7 +139,7 @@ function transfer_files() {
         if [[ -f "$(pwd)/${files[$i]}" ]]; then
 
             echo -e "[+] Sending file [${yellow}${files[$i]}${reset}] to [${yellow}$ip_add:/$host_folder${reset}]"
-            sshpass -p 'PASSWORD_REMOVED' scp -CTr "${files[$i]}" nisidabay@"$ip_add":"${HOME}"/"${host_folder}"
+            sshpass -p 'CHANGEME' scp -CTr "${files[$i]}" nisidabay@"$ip_add":"${HOME}"/"${host_folder}"
 
             echo -e "[+] Transfer complete${green} $OK${reset}\n"
 
@@ -148,7 +148,7 @@ function transfer_files() {
 
             echo -e "[+] Sending folder [${yellow}$files${reset}] to [${yellow}$ip_add:/$host_folder${reset}]"
 
-            sshpass -p 'PASSWORD_REMOVED' scp -CTr "${files[$i]}" nisidabay@"$ip_add":"${HOME}"/"${host_folder}"
+            sshpass -p 'CHANGEME' scp -CTr "${files[$i]}" nisidabay@"$ip_add":"${HOME}"/"${host_folder}"
 
             echo -e "[+] Transfer complete${green} $OK${reset}\n"
         else
