@@ -1,17 +1,17 @@
 # r_bash_scripts — Index
 
-195 Bash scripts across 9 directories. Personal collection for Arch Linux + dwm/niri. Dead scripts pruned — platform-mismatched, stubs, one-liners.
+189 Bash scripts across 9 directories. Personal collection for Arch Linux + dwm/niri. Dead scripts pruned — platform-mismatched, stubs, one-liners.
 
 | Dir | Count | Purpose |
 |-----|-------|---------|
 | [desktop](#desktop) | 26 | TUI toys, dmenu tools, wallpaper, color pickers |
 | [dev](#dev) | 7 | Templates, bash library, git checker, getopts |
-| [files](#files) | 21 | File operations, text processing, string splitting |
+| [files](#files) | 17 | File operations, text processing, string splitting |
 | [learning](#learning) | 12 | Educational: pure bash, concepts, loggers, progress bars |
 | [media](#media) | 4 | Audio/video format converters |
 | [reference_cards](#reference_cards) | 36 | dmenu/fuzzel-launched interactive cheat sheets |
 | [statusbar](#statusbar) | 33 | dwmblocks status bar modules (`sb-*`) |
-| [system](#system) | 37 | Network, security, sysadmin, system management |
+| [system](#system) | 36 | Network, security, sysadmin, system management |
 | [util](#util) | 8 | Toys, git observers, random generators |
 
 ---
@@ -87,11 +87,7 @@ File operations, text processing, string manipulation. Educational + practical.
 | `read_from_file.sh` | 13 | bash | Read and display a file line by line |
 | `repeat_string.sh` | 16 | printf | Print a string a number of times |
 | `rm_empty_lines.sh` | 39 | cp, mv | Remove empty lines from a file and make a backup |
-| `split_string_char_ifs.sh` | 20 | bash | Split a string based on character using IFS |
-| `split_string_readarray.sh` | 15 | bash | Split a string based on character without IFS |
-| `split_string_space.sh` | 15 | bash | Split a string based on space using IFS |
-| `split_string_tr.sh` | 15 | tr | Split a string using tr |
-| `split_string_word_delimiter.sh` | 29 | bash | Split a string with multi-character delimiter |
+| `split_string.sh` | 120 | bash, tr | Reference: split a string into an array — 5 methods |
 | `string_to_lower.sh` | 23 | tr | Convert string to lowercase |
 
 ---
@@ -249,7 +245,6 @@ Network tools, security (LUKS, passwords, USB encryption), system management, sy
 | `harmful_http_post.sh` | 29 | tcpdump, sudo | Monitor HTTP POST requests for suspicious commands |
 | `infoSystema.sh` | 21 | — | Display system information |
 | `inmutable_usb.sh` | 26 | chattr, find, sudo | Apply immutable attribute to USB files |
-| `install.sh` | 743 | git, curl | Install Homebrew |
 | `install_dmenu_scripts.sh` | 29 | file, ln | Symlink dmenu scripts to ~/bin |
 | `install_font.sh` | 17 | wget, unzip, fc-cache | Download and install Source Code Pro fonts |
 | `lib_validation.sh` | 66 | — | Reusable Bash validation functions |
