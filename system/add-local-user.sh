@@ -24,7 +24,8 @@ createUserAccount() {
     read -rp "Enter the real name for the user: " REAL_NAME
 
     # Prompt for the password.
-    read -rp "Enter the password to use for the account: " PASSWORD
+    read -rsp "Enter the password to use for the account: " PASSWORD
+    echo
 
     # Create the user account with the given username and real name.
     if ! useradd -c "${REAL_NAME}" -m "${USER_NAME}"; then
@@ -43,10 +44,9 @@ createUserAccount() {
     # Force password change on first login.
     passwd -e "${USER_NAME}"
 
-    # Display the username, password, and host where the account was created.
+    # Display the username and host where the account was created.
     echo "Account created successfully:"
     echo "Username: ${USER_NAME}"
-    echo "Password: ${PASSWORD}"
     echo "Host: $(hostname)"
     return 0
 }

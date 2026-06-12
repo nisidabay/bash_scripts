@@ -42,7 +42,13 @@ function genpass() {
     # Check for valid parameter
     if [ ${#length} -ge 1 ] && [ $length -gt 7 ]; then
 
-        PASSWD=$(tr -dc 'a-zA-Z0-9_#@.-' </dev/urandom | head -c ${1:-$length} | tee ${out_file})
+        PASSWD=$(tr -dc 'a-zA-Z0-9_#@.-' </dev/urandom | head -c ${1:-$length})
+
+        if [[ -n "$out_file" ]]; then
+            echo "$PASSWD" > "$out_file"
+            echo -e "${yellow}${bold}⚠ Password saved to: $(pwd)/$out_file (plaintext)${reset}"
+            echo -e "${yellow}${bold}  Consider: gpg -c $out_file && rm $out_file${reset}"
+        fi
 
         separator
         echo -e "${green}${bold}Password: $PASSWD ${reset}"
