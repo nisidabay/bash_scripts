@@ -1,8 +1,8 @@
 # Bash Scripts
 
-Personal collection of 189 Bash scripts for Arch Linux + dwm/niri. Dead weight pruned.
+Personal collection of 198 Bash scripts for Arch Linux + dwm/niri. Dead weight pruned.
 
-- **9 directories** organized by purpose
+- **10 directories** organized by purpose
 - Full catalog: [INDEX.md](INDEX.md)
 
 | Dir | Count | Purpose |
@@ -16,3 +16,4 @@ Personal collection of 189 Bash scripts for Arch Linux + dwm/niri. Dead weight p
 | `statusbar/` | 33 | dwmblocks modules |
 | `system/` | 36 | Network, security, sysadmin |
 | `util/` | 8 | Toys, generators, git observer |
+| `legacy/` | 9 | Archived Ollama scripts (obfuscated for public repo) |

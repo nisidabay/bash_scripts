@@ -1,6 +1,6 @@
 # r_bash_scripts — Index
 
-189 Bash scripts across 9 directories. Personal collection for Arch Linux + dwm/niri. Dead scripts pruned — platform-mismatched, stubs, one-liners.
+198 Bash scripts across 10 directories. Personal collection for Arch Linux + dwm/niri. Dead scripts pruned — platform-mismatched, stubs, one-liners.
 
 | Dir | Count | Purpose |
 |-----|-------|---------|
@@ -13,6 +13,7 @@
 | [statusbar](#statusbar) | 33 | dwmblocks status bar modules (`sb-*`) |
 | [system](#system) | 36 | Network, security, sysadmin, system management |
 | [util](#util) | 8 | Toys, git observers, random generators |
+| [legacy](#legacy) | 9 | Archived Ollama scripts (obfuscated for public repo) |
 
 ---
 
@@ -297,3 +298,21 @@ The key distinction: scripts you actually reach for vs. scripts you wrote once a
 - **Solid when needed**: `system/crypto_image_lnx.sh`, `system/usb_encrypt.sh`, `system/remote_transfer.sh`, `system/genpasswd.sh`.
 - **Learning/reference**: Everything in `learning/`, small educational snippets in `files/`.
 - **Toys**: `util/lottery.sh`, `util/multiplication_table.sh`, `util/random_*.sh`.
+
+---
+
+## legacy/
+
+Archived AI scripts from the Ollama era. Obfuscated for public repo — replace `{{PLACEHOLDERS}}` with your local AI backend commands.
+
+| Script | Lines | Dependencies | Purpose |
+|--------|-------|-------------|---------|
+| `ollama_patterns.sh` | 149 | fzf, xsel/xclip, notify-send, nvim | Pattern-based AI with fzf, clipboard, YouTube transcript |
+| `ollama_run.sh` | 6 | fzf | Simple fzf model selector + run |
+| `ollama_translate.sh` | 239 | xclip, notify-send, fzf | CLI translator with clipboard/pipe/args input |
+| `ollama_youtube_transcript.sh` | 272 | fzf, xclip/xsel, notify-send, nvim, youtube_transcript_api | YouTube transcript summarizer |
+| `ollama_explain.sh` | ~305 | fzf/fuzzel, xsel/wl-copy | Interactive chat TUI with dmenu/fuzzel |
+| `yad_ollama_translate.sh` | ~288 | yad, xclip, notify-send | GUI translator (YAD) |
+| `yad_ollama_explain.sh` | ~255 | yad, xclip, notify-send | GUI explainer (YAD) |
+| `yad_ollama_bash_coder.sh` | ~476 | yad, wl-clipboard/xclip, notify-send | GUI bash function generator (YAD) |
+| `kill_ollama.sh` | ~72 | sudo | Kill AI backend process |
